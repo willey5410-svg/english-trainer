@@ -1,0 +1,306 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import {
+  CATEGORY_LABELS,
+  Category,
+  DIFFICULTY_LABELS,
+  Difficulty,
+  Problem,
+  ProblemStats,
+} from "@/lib/types";
+import { loadStats } from "@/lib/storage";
+import { formatPercent } from "@/lib/statistics";
+
+type Props = {
+  initialProblems: Problem[];
+};
+
+type SortKey = "newest" | "oldest" | "category" | "difficulty" | "accuracy";
+
+const SORT_LABELS: Record<SortKey, string> = {
+  newest: "新しい順",
+  oldest: "古い順",
+  category: "カテゴリ順",
+  difficulty: "難易度順",
+  accuracy: "正答率（低い順）",
+};
+
+export const ProblemListView = ({ initialProblems }: Props) => {
+  const [problems, setProblems] = useState<Problem[]>(initialProblems);
+  const [stats, setStats] = useState<Record<string, ProblemStats>>({});
+  const [category, setCategory] = useState<Category | "all">("all");
+  const [difficulty, setDifficulty] = useState<Difficulty | "all">("all");
+  const [query, setQuery] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey>("newest");
+  const [busyIds, setBusyIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setStats(loadStats());
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return problems.filter((p) => {
+      if (category !== "all" && p.category !== category) return false;
+      if (difficulty !== "all" && p.difficulty !== difficulty) return false;
+      if (q) {
+        const hay =
+          `${p.japanese} ${p.english} ${p.grammar ?? ""} ${(p.tags ?? []).join(" ")}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [problems, category, difficulty, query]);
+
+  const sorted = useMemo(() => {
+    const list = [...filtered];
+    const accuracyOf = (p: Problem) => {
+      const s = stats[p.id];
+      if (!s) return -1;
+      const total = s.correctCount + s.incorrectCount;
+      if (total === 0) return -1;
+      return s.correctCount / total;
+    };
+    switch (sortKey) {
+      case "newest":
+        list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+        break;
+      case "oldest":
+        list.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+        break;
+      case "category":
+        list.sort(
+          (a, b) =>
+            a.category.localeCompare(b.category) ||
+            a.difficulty - b.difficulty ||
+            b.createdAt.localeCompare(a.createdAt),
+        );
+        break;
+      case "difficulty":
+        list.sort(
+          (a, b) =>
+            a.difficulty - b.difficulty ||
+            a.category.localeCompare(b.category) ||
+            b.createdAt.localeCompare(a.createdAt),
+        );
+        break;
+      case "accuracy":
+        list.sort((a, b) => {
+          const accA = accuracyOf(a);
+          const accB = accuracyOf(b);
+          if (accA === -1 && accB === -1) return 0;
+          if (accA === -1) return 1;
+          if (accB === -1) return -1;
+          return accA - accB;
+        });
+        break;
+    }
+    return list;
+  }, [filtered, sortKey, stats]);
+
+  const handleDeleteOne = async (id: string) => {
+    if (!window.confirm("この問題を削除しますか？")) return;
+    setBusyIds((prev) => new Set(prev).add(id));
+    try {
+      const res = await fetch(`/api/problems?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? "削除に失敗しました");
+      }
+      setProblems((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : "削除に失敗しました");
+    } finally {
+      setBusyIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
+
+  const handleDeleteCategory = async () => {
+    if (category === "all") return;
+    const targetLabel = CATEGORY_LABELS[category];
+    if (
+      !window.confirm(
+        `カテゴリ「${targetLabel}」の問題をすべて削除しますか？（${filtered.length} 問が対象）`,
+      )
+    ) {
+      return;
+    }
+    const res = await fetch(`/api/problems?category=${category}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      window.alert("削除に失敗しました");
+      return;
+    }
+    setProblems((prev) => prev.filter((p) => p.category !== category));
+  };
+
+  return (
+    <div className="space-y-4">
+      <section className="rounded-xl bg-brand-surface p-4 shadow-sm ring-1 ring-slate-200">
+        <div className="flex flex-wrap items-center gap-3 text-sm">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="検索（日本語・英訳・タグ）"
+            className="flex-1 min-w-[200px] rounded border border-slate-300 bg-white px-3 py-1.5"
+          />
+
+          <label className="flex items-center gap-2">
+            <span className="text-brand-muted">カテゴリ</span>
+            <select
+              className="rounded border border-slate-300 bg-white px-2 py-1"
+              value={category}
+              onChange={(e) =>
+                setCategory(e.target.value as Category | "all")
+              }
+            >
+              <option value="all">すべて</option>
+              {(Object.keys(CATEGORY_LABELS) as Category[]).map((c) => (
+                <option key={c} value={c}>
+                  {CATEGORY_LABELS[c]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex items-center gap-2">
+            <span className="text-brand-muted">難易度</span>
+            <select
+              className="rounded border border-slate-300 bg-white px-2 py-1"
+              value={difficulty}
+              onChange={(e) =>
+                setDifficulty(
+                  e.target.value === "all"
+                    ? "all"
+                    : (Number(e.target.value) as Difficulty),
+                )
+              }
+            >
+              <option value="all">すべて</option>
+              {([1, 2, 3, 4, 5] as Difficulty[]).map((d) => (
+                <option key={d} value={d}>
+                  {DIFFICULTY_LABELS[d]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex items-center gap-2">
+            <span className="text-brand-muted">並び替え</span>
+            <select
+              className="rounded border border-slate-300 bg-white px-2 py-1"
+              value={sortKey}
+              onChange={(e) => setSortKey(e.target.value as SortKey)}
+            >
+              {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
+                <option key={k} value={k}>
+                  {SORT_LABELS[k]}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="mt-3 flex items-center justify-between text-sm text-brand-muted">
+          <div>
+            {filtered.length} / {problems.length} 問
+          </div>
+          {category !== "all" && filtered.length > 0 && (
+            <button
+              type="button"
+              onClick={handleDeleteCategory}
+              className="text-xs text-red-600 hover:underline"
+            >
+              「{CATEGORY_LABELS[category]}」カテゴリを一括削除
+            </button>
+          )}
+        </div>
+      </section>
+
+      {sorted.length === 0 ? (
+        <div className="rounded-xl bg-brand-surface p-8 text-center shadow-sm ring-1 ring-slate-200">
+          <div className="text-brand-muted">該当する問題はありません。</div>
+        </div>
+      ) : (
+        <ul className="space-y-3">
+          {sorted.map((p) => {
+            const s = stats[p.id];
+            const total = s ? s.correctCount + s.incorrectCount : 0;
+            const accuracy = total > 0 ? s!.correctCount / total : null;
+            const isBusy = busyIds.has(p.id);
+            return (
+              <li
+                key={p.id}
+                className="rounded-xl bg-brand-surface p-4 shadow-sm ring-1 ring-slate-200"
+              >
+                <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
+                  <span className="rounded-full bg-blue-50 px-2 py-0.5 text-blue-700">
+                    {CATEGORY_LABELS[p.category]}
+                  </span>
+                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-amber-700">
+                    {DIFFICULTY_LABELS[p.difficulty]}
+                  </span>
+                  {p.grammar && (
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">
+                      {p.grammar}
+                    </span>
+                  )}
+                  {p.tags?.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-slate-50 px-2 py-0.5 text-slate-600"
+                    >
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-base font-medium text-brand-text">
+                  {p.japanese}
+                </div>
+                <div className="text-sm text-brand-muted">{p.english}</div>
+                {p.notes && (
+                  <div className="mt-2 rounded bg-slate-50 px-2 py-1 text-xs text-slate-700">
+                    📝 {p.notes}
+                  </div>
+                )}
+                <div className="mt-2 flex items-center justify-between text-xs text-brand-muted">
+                  <div>
+                    {total > 0 ? (
+                      <>
+                        ✓ {s!.correctCount} / ✗ {s!.incorrectCount}
+                        {accuracy !== null && (
+                          <span className="ml-2 font-medium text-brand-text">
+                            正答率 {formatPercent(accuracy)}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span>未回答</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteOne(p.id)}
+                    disabled={isBusy}
+                    className="text-red-600 hover:underline disabled:opacity-50"
+                  >
+                    {isBusy ? "削除中…" : "削除"}
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+};
