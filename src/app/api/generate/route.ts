@@ -10,6 +10,15 @@ const isDifficulty = (v: unknown): v is Difficulty =>
   typeof v === "number" && [1, 2, 3, 4, 5].includes(v);
 
 export async function POST(request: Request) {
+  // 問題生成は Gemini API を消費するため、デプロイ環境（Vercel）では無効化する。
+  // 生成はローカル開発環境でのみ行い、結果を data/problems.json に保存して再デプロイする運用。
+  if (process.env.VERCEL) {
+    return NextResponse.json(
+      { error: "この環境では問題生成は無効です（ローカル環境で生成してください）" },
+      { status: 403 },
+    );
+  }
+
   try {
     const body = await request.json();
 

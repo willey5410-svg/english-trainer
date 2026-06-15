@@ -17,6 +17,7 @@ import { GenerateDialog } from "./GenerateDialog";
 
 type Props = {
   initialProblems: Problem[];
+  allowGenerate: boolean;
 };
 
 const computeExcludeSize = (poolSize: number): number => {
@@ -37,7 +38,7 @@ const pickRandomExcluding = (
   return target[Math.floor(Math.random() * target.length)];
 };
 
-export const TrainingApp = ({ initialProblems }: Props) => {
+export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
@@ -143,15 +144,17 @@ export const TrainingApp = ({ initialProblems }: Props) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end">
-        <button
-          type="button"
-          onClick={() => setDialogOpen(true)}
-          className="rounded-lg bg-brand-accent px-4 py-2 text-sm font-medium text-white shadow hover:bg-amber-600"
-        >
-          + 問題を生成
-        </button>
-      </div>
+      {allowGenerate && (
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            onClick={() => setDialogOpen(true)}
+            className="rounded-lg bg-brand-accent px-4 py-2 text-sm font-medium text-white shadow hover:bg-amber-600"
+          >
+            + 問題を生成
+          </button>
+        </div>
+      )}
 
       <FilterBar
         settings={settings}
@@ -186,11 +189,13 @@ export const TrainingApp = ({ initialProblems }: Props) => {
         totalProblems={problems.length}
       />
 
-      <GenerateDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        onGenerated={handleGenerated}
-      />
+      {allowGenerate && (
+        <GenerateDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onGenerated={handleGenerated}
+        />
+      )}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-lg bg-emerald-600 px-4 py-2 text-sm text-white shadow-lg">

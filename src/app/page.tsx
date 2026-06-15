@@ -4,6 +4,10 @@ import { TrainingApp } from "@/components/TrainingApp";
 
 export const dynamic = "force-dynamic";
 
+// 問題生成は Gemini API を消費するため、ローカル開発時のみ許可する。
+// Vercel 等のデプロイ環境では VERCEL 環境変数が設定されるので無効化される。
+const allowGenerate = !process.env.VERCEL;
+
 export default async function Page() {
   const problems = await loadProblems();
   return (
@@ -21,7 +25,7 @@ export default async function Page() {
           </Link>
         </nav>
       </header>
-      <TrainingApp initialProblems={problems} />
+      <TrainingApp initialProblems={problems} allowGenerate={allowGenerate} />
     </main>
   );
 }
