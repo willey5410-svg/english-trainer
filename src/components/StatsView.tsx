@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Problem, ProblemStats } from "@/lib/types";
-import { clearStats, loadStats } from "@/lib/storage";
+import { clearStats, loadCustomProblems, loadStats } from "@/lib/storage";
 import {
   computeAggregate,
   computeByCategory,
@@ -57,14 +57,22 @@ const GroupRow = <K extends string | number>({ row }: { row: GroupedStats<K> }) 
   );
 };
 
-export const StatsView = ({ problems }: Props) => {
+export const StatsView = ({ problems: fileProblems }: Props) => {
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
+  const [customProblems, setCustomProblems] = useState<Problem[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setStats(loadStats());
+    setCustomProblems(loadCustomProblems());
     setHydrated(true);
   }, []);
+
+  // ファイル由来の問題とブラウザ保存の自作問題を統合（id 重複は除外）
+  const problems = useMemo(() => {
+    const ids = new Set(fileProblems.map((p) => p.id));
+    return [...fileProblems, ...customProblems.filter((p) => !ids.has(p.id))];
+  }, [fileProblems, customProblems]);
 
   if (!hydrated) {
     return <div className="text-center text-brand-muted">読み込み中…</div>;

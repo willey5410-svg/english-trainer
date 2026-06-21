@@ -12,6 +12,8 @@ import {
 } from "./types";
 
 const MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+// 採点はリクエスト数が多くなりがちなので、無料枠の日次上限が大きい flash-lite を既定にする。
+const GRADE_MODEL = process.env.GEMINI_GRADE_MODEL ?? "gemini-2.5-flash-lite";
 
 const getClient = (): GoogleGenerativeAI => {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -141,4 +143,100 @@ export const generateProblems = async (
       tags: it.tags?.filter((t) => typeof t === "string" && t.trim()),
       createdAt: now,
     }));
+};
+
+export type GradeParams = {
+  japanese: string;
+  reference: string;
+  userAnswer: string;
+};
+
+export type GradeVerdict = "correct" | "close" | "incorrect";
+
+export type GradeResult = {
+  score: number;
+  verdict: GradeVerdict;
+  feedback: string;
+  betterVersion?: string;
+};
+
+const gradeResponseSchema: ResponseSchema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    score: { type: SchemaType.NUMBER },
+    verdict: {
+      type: SchemaType.STRING,
+      format: "enum",
+      enum: ["correct", "close", "incorrect"],
+    },
+    feedback: { type: SchemaType.STRING },
+    betterVersion: { type: SchemaType.STRING },
+  },
+  required: ["score", "verdict", "feedback"],
+};
+
+const buildGradePrompt = (params: GradeParams): string => {
+  return `あなたは英語学習者の「瞬間英作文」を採点する経験豊富な英語講師です。
+学習者が日本語文を英訳しました。模範解答は1例にすぎないため、意味が正しく自然に伝わっていれば、模範解答と表現が違っても正解にしてください。
+
+## 課題の日本語文
+${params.japanese}
+
+## 模範解答（あくまで一例）
+${params.reference}
+
+## 学習者の英訳
+${params.userAnswer}
+
+## 採点方針
+- 日本語の意味が正確かつ自然に伝わっているかを最優先で評価する
+- 文法・語法・スペル・時制・冠詞・前置詞などの誤りを減点要素とする
+- 模範解答と単語が違うだけで意味が正しいものは減点しない
+- score: 0〜100 の整数（100=完璧、70以上=実用上正解、40未満=意味が伝わらない）
+- verdict: "correct"（実質正解）/ "close"（惜しい・軽微な誤り）/ "incorrect"（意味が伝わらない）
+- feedback: 日本語で2〜4文。良い点と、直すべき点を具体的に指摘する
+- betterVersion: 学習者の英訳をベースに自然に直した英文（既に完璧なら模範解答でよい）
+
+## 出力形式
+JSON のみで返してください。説明文・マークダウンは不要です。`;
+};
+
+export const gradeAnswer = async (
+  params: GradeParams,
+): Promise<GradeResult> => {
+  const genAI = getClient();
+  const model = genAI.getGenerativeModel({
+    model: GRADE_MODEL,
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: gradeResponseSchema,
+      temperature: 0.2,
+    },
+  });
+
+  const result = await model.generateContent(buildGradePrompt(params));
+  const text = result.response.text();
+
+  let parsed: GradeResult;
+  try {
+    parsed = JSON.parse(text);
+  } catch (err) {
+    throw new Error(`Gemini レスポンスの JSON パースに失敗しました: ${err}`);
+  }
+
+  const score = Math.max(0, Math.min(100, Math.round(Number(parsed.score) || 0)));
+  const verdict: GradeVerdict =
+    parsed.verdict === "correct" || parsed.verdict === "incorrect"
+      ? parsed.verdict
+      : "close";
+
+  return {
+    score,
+    verdict,
+    feedback: typeof parsed.feedback === "string" ? parsed.feedback.trim() : "",
+    betterVersion:
+      typeof parsed.betterVersion === "string" && parsed.betterVersion.trim()
+        ? parsed.betterVersion.trim()
+        : undefined,
+  };
 };

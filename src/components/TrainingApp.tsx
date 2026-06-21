@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Problem, AppSettings, ProblemStats } from "@/lib/types";
 import {
   DEFAULT_SETTINGS,
+  loadCustomProblems,
   loadSettings,
   loadStats,
   recordAnswer,
@@ -14,10 +15,12 @@ import { FilterBar } from "./FilterBar";
 import { StatsBar } from "./StatsBar";
 import { TrainingCard } from "./TrainingCard";
 import { GenerateDialog } from "./GenerateDialog";
+import { AddProblemDialog } from "./AddProblemDialog";
 
 type Props = {
   initialProblems: Problem[];
   allowGenerate: boolean;
+  allowGrade: boolean;
 };
 
 const computeExcludeSize = (poolSize: number): number => {
@@ -38,8 +41,13 @@ const pickRandomExcluding = (
   return target[Math.floor(Math.random() * target.length)];
 };
 
-export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
-  const [problems, setProblems] = useState<Problem[]>(initialProblems);
+export const TrainingApp = ({
+  initialProblems,
+  allowGenerate,
+  allowGrade,
+}: Props) => {
+  const [fileProblems, setFileProblems] = useState<Problem[]>(initialProblems);
+  const [customProblems, setCustomProblems] = useState<Problem[]>([]);
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
   const [currentProblem, setCurrentProblem] = useState<Problem | null>(null);
@@ -49,13 +57,21 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [hydrated, setHydrated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     setSettings(loadSettings());
     setStats(loadStats());
+    setCustomProblems(loadCustomProblems());
     setHydrated(true);
   }, []);
+
+  // ファイル由来の問題とブラウザ保存の自作問題を統合（id 重複は除外）
+  const problems = useMemo(() => {
+    const ids = new Set(fileProblems.map((p) => p.id));
+    return [...fileProblems, ...customProblems.filter((p) => !ids.has(p.id))];
+  }, [fileProblems, customProblems]);
 
   const filteredProblems = useMemo(() => {
     return problems.filter((p) => {
@@ -126,7 +142,12 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
     const res = await fetch("/api/problems");
     if (!res.ok) return;
     const data = await res.json();
-    setProblems(data.problems as Problem[]);
+    setFileProblems(data.problems as Problem[]);
+  }, []);
+
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    setTimeout(() => setToast(null), 4000);
   }, []);
 
   const handleGenerated = async (result: {
@@ -134,8 +155,20 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
     totalProblems: number;
   }) => {
     await reloadProblems();
-    setToast(`${result.generated} 問を生成しました（合計 ${result.totalProblems} 問）`);
-    setTimeout(() => setToast(null), 4000);
+    showToast(`${result.generated} 問を生成しました（合計 ${result.totalProblems} 問）`);
+  };
+
+  const handleAdded = async (result: {
+    problem: Problem;
+    savedToPool: boolean;
+  }) => {
+    if (result.savedToPool) {
+      await reloadProblems();
+      showToast("文章を共有プールに追加しました");
+    } else {
+      setCustomProblems((prev) => [...prev, result.problem]);
+      showToast("文章をこのブラウザに追加しました");
+    }
   };
 
   if (!hydrated) {
@@ -144,8 +177,15 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
 
   return (
     <div className="space-y-4">
-      {allowGenerate && (
-        <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => setAddOpen(true)}
+          className="rounded-lg border border-brand-primary bg-white px-4 py-2 text-sm font-medium text-brand-primary shadow-sm hover:bg-blue-50"
+        >
+          + 文章を追加
+        </button>
+        {allowGenerate && (
           <button
             type="button"
             onClick={() => setDialogOpen(true)}
@@ -153,8 +193,8 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
           >
             + 問題を生成
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       <FilterBar
         settings={settings}
@@ -173,6 +213,7 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
           key={`${currentProblem.id}-${advanceCount}`}
           problem={currentProblem}
           strictMode={settings.strictMode}
+          allowGrade={allowGrade}
           onAnswered={handleAnswered}
           onNext={handleNext}
           onSkip={handleSkip}
@@ -196,6 +237,13 @@ export const TrainingApp = ({ initialProblems, allowGenerate }: Props) => {
           onGenerated={handleGenerated}
         />
       )}
+
+      <AddProblemDialog
+        open={addOpen}
+        allowPool={allowGenerate}
+        onClose={() => setAddOpen(false)}
+        onAdded={handleAdded}
+      />
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-lg bg-emerald-600 px-4 py-2 text-sm text-white shadow-lg">

@@ -5,9 +5,40 @@ import { computeDiff, isExactMatch } from "@/lib/diff";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, Problem } from "@/lib/types";
 import { DiffView } from "./DiffView";
 
+type GradeVerdict = "correct" | "close" | "incorrect";
+
+type GradeResult = {
+  score: number;
+  verdict: GradeVerdict;
+  feedback: string;
+  betterVersion?: string;
+};
+
+const VERDICT_META: Record<
+  GradeVerdict,
+  { label: string; box: string; bar: string }
+> = {
+  correct: {
+    label: "正解",
+    box: "bg-emerald-50 text-emerald-800 ring-emerald-200",
+    bar: "bg-emerald-500",
+  },
+  close: {
+    label: "惜しい",
+    box: "bg-amber-50 text-amber-800 ring-amber-200",
+    bar: "bg-amber-500",
+  },
+  incorrect: {
+    label: "不正解",
+    box: "bg-red-50 text-red-800 ring-red-200",
+    bar: "bg-red-500",
+  },
+};
+
 type Props = {
   problem: Problem;
   strictMode: boolean;
+  allowGrade: boolean;
   onAnswered: (isCorrect: boolean) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -16,6 +47,7 @@ type Props = {
 export const TrainingCard = ({
   problem,
   strictMode,
+  allowGrade,
   onAnswered,
   onNext,
   onSkip,
@@ -23,14 +55,47 @@ export const TrainingCard = ({
   const [userInput, setUserInput] = useState("");
   const [revealed, setRevealed] = useState(false);
   const [graded, setGraded] = useState(false);
+  const [grading, setGrading] = useState(false);
+  const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
+  const [gradeError, setGradeError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setUserInput("");
     setRevealed(false);
     setGraded(false);
+    setGrading(false);
+    setGradeResult(null);
+    setGradeError(null);
     textareaRef.current?.focus();
   }, [problem.id]);
+
+  const handleAIGrade = async () => {
+    if (grading) return;
+    setGrading(true);
+    setGradeError(null);
+    try {
+      const res = await fetch("/api/grade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          japanese: problem.japanese,
+          reference: problem.english,
+          userAnswer: userInput,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error ?? "採点に失敗しました");
+      }
+      setGradeResult(data as GradeResult);
+      setRevealed(true);
+    } catch (err) {
+      setGradeError(err instanceof Error ? err.message : "採点に失敗しました");
+    } finally {
+      setGrading(false);
+    }
+  };
 
   const handleReveal = () => {
     setRevealed(true);
@@ -86,15 +151,33 @@ export const TrainingCard = ({
         ヒント: Cmd/Ctrl + Enter で解答表示
       </div>
 
+      {gradeError && (
+        <div className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+          {gradeError}
+        </div>
+      )}
+
       {!revealed ? (
         <div className="mt-5 flex flex-col items-center gap-2">
-          <button
-            type="button"
-            onClick={handleReveal}
-            className="rounded-lg bg-brand-primary px-6 py-2.5 text-base font-medium text-white shadow hover:bg-blue-700 active:bg-blue-800"
-          >
-            解答を見る
-          </button>
+          <div className="flex flex-wrap justify-center gap-3">
+            {allowGrade && (
+              <button
+                type="button"
+                onClick={handleAIGrade}
+                disabled={grading || !userInput.trim()}
+                className="rounded-lg bg-brand-accent px-6 py-2.5 text-base font-medium text-white shadow hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {grading ? "採点中…" : "AIで採点"}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={handleReveal}
+              className="rounded-lg bg-brand-primary px-6 py-2.5 text-base font-medium text-white shadow hover:bg-blue-700 active:bg-blue-800"
+            >
+              解答を見る
+            </button>
+          </div>
           <button
             type="button"
             onClick={onSkip}
@@ -105,6 +188,36 @@ export const TrainingCard = ({
         </div>
       ) : (
         <div className="mt-6 space-y-5">
+          {gradeResult && (
+            <div
+              className={`rounded-lg p-4 ring-1 ${VERDICT_META[gradeResult.verdict].box}`}
+            >
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-bold">
+                  AI採点: {VERDICT_META[gradeResult.verdict].label}
+                </span>
+                <span className="text-2xl font-bold tabular-nums">
+                  {gradeResult.score}
+                  <span className="ml-0.5 text-sm font-normal">/100</span>
+                </span>
+              </div>
+              <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-white/60">
+                <div
+                  className={`h-full ${VERDICT_META[gradeResult.verdict].bar}`}
+                  style={{ width: `${gradeResult.score}%` }}
+                />
+              </div>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                {gradeResult.feedback}
+              </p>
+              {gradeResult.betterVersion && (
+                <div className="mt-3 rounded-md bg-white/70 px-3 py-2 text-sm">
+                  <span className="mr-1 font-medium">改善例:</span>
+                  {gradeResult.betterVersion}
+                </div>
+              )}
+            </div>
+          )}
           {autoMatch && (
             <div className="rounded-md bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
               完全一致しました

@@ -4,6 +4,9 @@ import { ProblemListView } from "@/components/ProblemListView";
 
 export const dynamic = "force-dynamic";
 
+// 共有プール（ファイル）への保存はローカル開発時のみ可能。
+const allowPool = !process.env.VERCEL;
+
 export default async function ProblemsPage() {
   const problems = await loadProblems();
   return (
@@ -19,7 +22,7 @@ export default async function ProblemsPage() {
           </Link>
         </nav>
       </header>
-      <ProblemListView initialProblems={problems} />
+      <ProblemListView initialProblems={problems} allowPool={allowPool} />
     </main>
   );
 }

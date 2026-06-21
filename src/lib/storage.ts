@@ -1,9 +1,10 @@
 "use client";
 
-import { AppSettings, ProblemStats } from "./types";
+import { AppSettings, Problem, ProblemStats } from "./types";
 
 const STATS_KEY = "english-trainer:stats";
 const SETTINGS_KEY = "english-trainer:settings";
+const CUSTOM_PROBLEMS_KEY = "english-trainer:custom-problems";
 
 export const DEFAULT_SETTINGS: AppSettings = {
   filterCategory: "all",
@@ -66,3 +67,36 @@ export const clearStats = (): void => {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(STATS_KEY);
 };
+
+// 自作問題（ブラウザ保存）。公開環境でもファイル書き込みなしで追加できるように
+// localStorage に保存する。id は "local-" 始まりにして保存先を判別できるようにする。
+export const loadCustomProblems = (): Problem[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(CUSTOM_PROBLEMS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as Problem[]) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveCustomProblems = (problems: Problem[]): void => {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(CUSTOM_PROBLEMS_KEY, JSON.stringify(problems));
+};
+
+export const addCustomProblem = (problem: Problem): Problem[] => {
+  const merged = [...loadCustomProblems(), problem];
+  saveCustomProblems(merged);
+  return merged;
+};
+
+export const deleteCustomProblem = (id: string): Problem[] => {
+  const remaining = loadCustomProblems().filter((p) => p.id !== id);
+  saveCustomProblems(remaining);
+  return remaining;
+};
+
+export const isCustomProblemId = (id: string): boolean => id.startsWith("local-");

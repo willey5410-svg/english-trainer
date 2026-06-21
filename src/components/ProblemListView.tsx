@@ -9,11 +9,18 @@ import {
   Problem,
   ProblemStats,
 } from "@/lib/types";
-import { loadStats } from "@/lib/storage";
+import {
+  deleteCustomProblem,
+  isCustomProblemId,
+  loadCustomProblems,
+  loadStats,
+} from "@/lib/storage";
 import { formatPercent } from "@/lib/statistics";
+import { AddProblemDialog } from "./AddProblemDialog";
 
 type Props = {
   initialProblems: Problem[];
+  allowPool: boolean;
 };
 
 type SortKey = "newest" | "oldest" | "category" | "difficulty" | "accuracy";
@@ -26,7 +33,7 @@ const SORT_LABELS: Record<SortKey, string> = {
   accuracy: "正答率（低い順）",
 };
 
-export const ProblemListView = ({ initialProblems }: Props) => {
+export const ProblemListView = ({ initialProblems, allowPool }: Props) => {
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
   const [category, setCategory] = useState<Category | "all">("all");
@@ -34,9 +41,15 @@ export const ProblemListView = ({ initialProblems }: Props) => {
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [busyIds, setBusyIds] = useState<Set<string>>(new Set());
+  const [addOpen, setAddOpen] = useState(false);
 
   useEffect(() => {
     setStats(loadStats());
+    // ブラウザ保存の自作問題を統合（id 重複は除外）
+    setProblems((prev) => {
+      const ids = new Set(prev.map((p) => p.id));
+      return [...prev, ...loadCustomProblems().filter((p) => !ids.has(p.id))];
+    });
   }, []);
 
   const filtered = useMemo(() => {
@@ -99,16 +112,25 @@ export const ProblemListView = ({ initialProblems }: Props) => {
     return list;
   }, [filtered, sortKey, stats]);
 
+  const handleAdded = (result: { problem: Problem }) => {
+    setProblems((prev) => [...prev, result.problem]);
+  };
+
   const handleDeleteOne = async (id: string) => {
     if (!window.confirm("この問題を削除しますか？")) return;
     setBusyIds((prev) => new Set(prev).add(id));
     try {
-      const res = await fetch(`/api/problems?id=${encodeURIComponent(id)}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error ?? "削除に失敗しました");
+      if (isCustomProblemId(id)) {
+        // ブラウザ保存（localStorage）の自作問題
+        deleteCustomProblem(id);
+      } else {
+        const res = await fetch(`/api/problems?id=${encodeURIComponent(id)}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error ?? "削除に失敗しました");
+        }
       }
       setProblems((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
@@ -132,11 +154,16 @@ export const ProblemListView = ({ initialProblems }: Props) => {
     ) {
       return;
     }
+    // ブラウザ保存の自作問題を先に削除
+    problems
+      .filter((p) => p.category === category && isCustomProblemId(p.id))
+      .forEach((p) => deleteCustomProblem(p.id));
+
     const res = await fetch(`/api/problems?category=${category}`, {
       method: "DELETE",
     });
     if (!res.ok) {
-      window.alert("削除に失敗しました");
+      window.alert("削除に失敗しました（共有プール分）");
       return;
     }
     setProblems((prev) => prev.filter((p) => p.category !== category));
@@ -144,6 +171,23 @@ export const ProblemListView = ({ initialProblems }: Props) => {
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-end">
+        <button
+          type="button"
+          onClick={() => setAddOpen(true)}
+          className="rounded-lg border border-brand-primary bg-white px-4 py-2 text-sm font-medium text-brand-primary shadow-sm hover:bg-blue-50"
+        >
+          + 文章を追加
+        </button>
+      </div>
+
+      <AddProblemDialog
+        open={addOpen}
+        allowPool={allowPool}
+        onClose={() => setAddOpen(false)}
+        onAdded={handleAdded}
+      />
+
       <section className="rounded-xl bg-brand-surface p-4 shadow-sm ring-1 ring-slate-200">
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <input
