@@ -21,6 +21,7 @@ import { AddProblemDialog } from "./AddProblemDialog";
 type Props = {
   initialProblems: Problem[];
   allowPool: boolean;
+  allowAI: boolean;
 };
 
 type SortKey = "newest" | "oldest" | "category" | "difficulty" | "accuracy";
@@ -33,7 +34,11 @@ const SORT_LABELS: Record<SortKey, string> = {
   accuracy: "正答率（低い順）",
 };
 
-export const ProblemListView = ({ initialProblems, allowPool }: Props) => {
+export const ProblemListView = ({
+  initialProblems,
+  allowPool,
+  allowAI,
+}: Props) => {
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
   const [category, setCategory] = useState<Category | "all">("all");
@@ -184,6 +189,7 @@ export const ProblemListView = ({ initialProblems, allowPool }: Props) => {
       <AddProblemDialog
         open={addOpen}
         allowPool={allowPool}
+        allowTranslate={allowAI}
         onClose={() => setAddOpen(false)}
         onAdded={handleAdded}
       />

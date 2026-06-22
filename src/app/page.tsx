@@ -4,10 +4,11 @@ import { TrainingApp } from "@/components/TrainingApp";
 
 export const dynamic = "force-dynamic";
 
-// 問題生成・AI 採点は Gemini API を消費するため、ローカル開発時のみ許可する。
-// Vercel 等のデプロイ環境では VERCEL 環境変数が設定されるので無効化される。
+// 問題生成・共有プールへの保存はファイル書き込みが必要なため、ローカル開発時のみ許可する。
 const allowGenerate = !process.env.VERCEL;
-const allowGrade = !process.env.VERCEL;
+// AI 採点・英訳は、ローカル または アクセスコード設定済み のとき利用可能にする。
+// （実際の許可判定はサーバー側の checkAiAccess でも行う）
+const allowAI = !process.env.VERCEL || !!process.env.APP_ACCESS_CODE;
 
 export default async function Page() {
   const problems = await loadProblems();
@@ -29,7 +30,7 @@ export default async function Page() {
       <TrainingApp
         initialProblems={problems}
         allowGenerate={allowGenerate}
-        allowGrade={allowGrade}
+        allowGrade={allowAI}
       />
     </main>
   );

@@ -9,10 +9,12 @@ import {
   Problem,
 } from "@/lib/types";
 import { addCustomProblem } from "@/lib/storage";
+import { aiPost } from "@/lib/access";
 
 type Props = {
   open: boolean;
   allowPool: boolean;
+  allowTranslate: boolean;
   defaultCategory?: Category;
   onClose: () => void;
   onAdded: (result: { problem: Problem; savedToPool: boolean }) => void;
@@ -21,6 +23,7 @@ type Props = {
 export const AddProblemDialog = ({
   open,
   allowPool,
+  allowTranslate,
   defaultCategory = "other",
   onClose,
   onAdded,
@@ -34,6 +37,7 @@ export const AddProblemDialog = ({
   // ローカル開発時は既定で共有プール（ファイル）に保存。公開環境ではブラウザ保存のみ。
   const [saveToPool, setSaveToPool] = useState(allowPool);
   const [loading, setLoading] = useState(false);
+  const [translating, setTranslating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!open) return null;
@@ -44,6 +48,28 @@ export const AddProblemDialog = ({
     setGrammar("");
     setNotes("");
     setError(null);
+  };
+
+  const handleTranslate = async () => {
+    const jp = japanese.trim();
+    if (!jp) {
+      setError("先に日本語文を入力してください");
+      return;
+    }
+    setTranslating(true);
+    setError(null);
+    try {
+      const res = await aiPost("/api/translate", { japanese: jp, difficulty });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "英訳に失敗しました");
+      // 英訳は欄に反映（自動入力後も手で修正できる）。notes は空のときだけ補完する。
+      setEnglish(data.english ?? "");
+      if (data.notes && !notes.trim()) setNotes(data.notes);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "英訳に失敗しました");
+    } finally {
+      setTranslating(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -126,14 +152,26 @@ export const AddProblemDialog = ({
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-sm text-brand-muted">英訳</span>
+            <div className="mb-1 flex items-center justify-between">
+              <span className="text-sm text-brand-muted">英訳</span>
+              {allowTranslate && (
+                <button
+                  type="button"
+                  onClick={handleTranslate}
+                  disabled={loading || translating || !japanese.trim()}
+                  className="rounded bg-brand-accent px-2.5 py-1 text-xs font-medium text-white hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {translating ? "英訳中…" : "AIで英訳"}
+                </button>
+              )}
+            </div>
             <textarea
               className="w-full rounded border border-slate-300 bg-white px-3 py-2"
               rows={2}
               value={english}
               onChange={(e) => setEnglish(e.target.value)}
-              placeholder="例: Could you tell me the way to the station?"
-              disabled={loading}
+              placeholder="例: Could you tell me the way to the station?（日本語を入れて「AIで英訳」も可）"
+              disabled={loading || translating}
             />
           </label>
 

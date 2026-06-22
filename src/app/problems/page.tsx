@@ -6,6 +6,8 @@ export const dynamic = "force-dynamic";
 
 // 共有プール（ファイル）への保存はローカル開発時のみ可能。
 const allowPool = !process.env.VERCEL;
+// AI 英訳は、ローカル または アクセスコード設定済み のとき利用可能。
+const allowAI = !process.env.VERCEL || !!process.env.APP_ACCESS_CODE;
 
 export default async function ProblemsPage() {
   const problems = await loadProblems();
@@ -22,7 +24,11 @@ export default async function ProblemsPage() {
           </Link>
         </nav>
       </header>
-      <ProblemListView initialProblems={problems} allowPool={allowPool} />
+      <ProblemListView
+        initialProblems={problems}
+        allowPool={allowPool}
+        allowAI={allowAI}
+      />
     </main>
   );
 }

@@ -241,6 +241,7 @@ export const TrainingApp = ({
       <AddProblemDialog
         open={addOpen}
         allowPool={allowGenerate}
+        allowTranslate={allowGrade}
         onClose={() => setAddOpen(false)}
         onAdded={handleAdded}
       />

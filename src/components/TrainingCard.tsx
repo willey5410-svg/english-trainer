@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { computeDiff, isExactMatch } from "@/lib/diff";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, Problem } from "@/lib/types";
+import { aiPost } from "@/lib/access";
 import { DiffView } from "./DiffView";
 
 type GradeVerdict = "correct" | "close" | "incorrect";
@@ -75,14 +76,10 @@ export const TrainingCard = ({
     setGrading(true);
     setGradeError(null);
     try {
-      const res = await fetch("/api/grade", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          japanese: problem.japanese,
-          reference: problem.english,
-          userAnswer: userInput,
-        }),
+      const res = await aiPost("/api/grade", {
+        japanese: problem.japanese,
+        reference: problem.english,
+        userAnswer: userInput,
       });
       const data = await res.json();
       if (!res.ok) {

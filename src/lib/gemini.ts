@@ -240,3 +240,89 @@ export const gradeAnswer = async (
         : undefined,
   };
 };
+
+export type TranslateParams = {
+  japanese: string;
+  difficulty?: Difficulty;
+};
+
+export type TranslateResult = {
+  english: string;
+  notes?: string;
+  tags?: string[];
+};
+
+const translateResponseSchema: ResponseSchema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    english: { type: SchemaType.STRING },
+    notes: { type: SchemaType.STRING },
+    tags: {
+      type: SchemaType.ARRAY,
+      items: { type: SchemaType.STRING },
+    },
+  },
+  required: ["english"],
+};
+
+const buildTranslatePrompt = (params: TranslateParams): string => {
+  const difficultyLine = params.difficulty
+    ? `- 難易度の目安: ${DIFFICULTY_LABELS[params.difficulty]}（この水準の語彙・文型で）`
+    : "- 難易度の目安: 自然で標準的な表現で";
+
+  return `あなたは英語学習教材の作成者です。日本語話者向けの「瞬間英作文」用に、次の日本語文を自然な英語に翻訳してください。
+
+## 日本語文
+${params.japanese}
+
+## 翻訳の方針
+${difficultyLine}
+- 日本語の意味を最も自然に表す標準的な英訳を1つだけ作る（過度に技巧的にしない）
+- notes には学習者が躓きやすい文法・語彙のポイントを日本語で1〜2文、簡潔に
+- tags には文法カテゴリや表現タイプを2〜3個（例: "現在完了", "助動詞", "受動態"）
+
+## 出力形式
+JSON のみで返してください。説明文・マークダウンは不要です。`;
+};
+
+export const translateToEnglish = async (
+  params: TranslateParams,
+): Promise<TranslateResult> => {
+  const genAI = getClient();
+  // 翻訳も採点と同様にリクエストが増えやすいので flash-lite を使う。
+  const model = genAI.getGenerativeModel({
+    model: GRADE_MODEL,
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: translateResponseSchema,
+      temperature: 0.4,
+    },
+  });
+
+  const result = await model.generateContent(buildTranslatePrompt(params));
+  const text = result.response.text();
+
+  let parsed: TranslateResult;
+  try {
+    parsed = JSON.parse(text);
+  } catch (err) {
+    throw new Error(`Gemini レスポンスの JSON パースに失敗しました: ${err}`);
+  }
+
+  const english =
+    typeof parsed.english === "string" ? parsed.english.trim() : "";
+  if (!english) {
+    throw new Error("英訳が生成されませんでした。再度お試しください。");
+  }
+
+  return {
+    english,
+    notes:
+      typeof parsed.notes === "string" && parsed.notes.trim()
+        ? parsed.notes.trim()
+        : undefined,
+    tags: Array.isArray(parsed.tags)
+      ? parsed.tags.filter((t) => typeof t === "string" && t.trim())
+      : undefined,
+  };
+};
