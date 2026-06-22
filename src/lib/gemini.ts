@@ -25,6 +25,37 @@ const getClient = (): GoogleGenerativeAI => {
   return new GoogleGenerativeAI(apiKey);
 };
 
+export class GeminiRateLimitError extends Error {
+  constructor() {
+    super("Gemini APIの利用回数が上限に達しました。1分ほど待って再試行してください。");
+    this.name = "GeminiRateLimitError";
+  }
+}
+
+const isRateLimitError = (err: unknown): boolean =>
+  err instanceof Error &&
+  ("status" in err && (err as { status?: number }).status === 429);
+
+// 無料枠の分単位レート制限に短時間で達した場合、待って自動的に再試行する。
+const withRetry = async <T>(
+  fn: () => Promise<T>,
+  retries = 2,
+  delayMs = 3000,
+): Promise<T> => {
+  try {
+    return await fn();
+  } catch (err) {
+    if (isRateLimitError(err) && retries > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      return withRetry(fn, retries - 1, delayMs * 2);
+    }
+    if (isRateLimitError(err)) {
+      throw new GeminiRateLimitError();
+    }
+    throw err;
+  }
+};
+
 export type GenerateParams = {
   category: Category;
   difficulty: Difficulty;
@@ -214,7 +245,9 @@ export const gradeAnswer = async (
     },
   });
 
-  const result = await model.generateContent(buildGradePrompt(params));
+  const result = await withRetry(() =>
+    model.generateContent(buildGradePrompt(params)),
+  );
   const text = result.response.text();
 
   let parsed: GradeResult;
