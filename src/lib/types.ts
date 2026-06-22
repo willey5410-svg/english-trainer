@@ -15,14 +15,12 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   other: "その他",
 };
 
-export type Difficulty = 1 | 2 | 3 | 4 | 5;
+export type Difficulty = 1 | 2 | 3;
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
-  1: "★☆☆☆☆ 入門",
-  2: "★★☆☆☆ 初級",
-  3: "★★★☆☆ 中級",
-  4: "★★★★☆ 上級",
-  5: "★★★★★ 最上級",
+  1: "★★★☆☆ 中級",
+  2: "★★★★☆ 上級",
+  3: "★★★★★ 最上級",
 };
 
 export type Problem = {

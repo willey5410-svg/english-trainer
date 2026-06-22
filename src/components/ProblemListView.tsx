@@ -109,7 +109,7 @@ export const ProblemListView = ({
               japanese: item.japanese,
               english: item.english,
               category: item.category ?? "other",
-              difficulty: item.difficulty ?? 2,
+              difficulty: item.difficulty ?? 1,
               grammar: item.grammar,
               notes: item.notes,
             }),
@@ -350,7 +350,7 @@ export const ProblemListView = ({
               }
             >
               <option value="all">すべて</option>
-              {([1, 2, 3, 4, 5] as Difficulty[]).map((d) => (
+              {([1, 2, 3] as Difficulty[]).map((d) => (
                 <option key={d} value={d}>
                   {DIFFICULTY_LABELS[d]}
                 </option>

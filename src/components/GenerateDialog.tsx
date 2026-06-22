@@ -35,7 +35,7 @@ const GRAMMAR_PRESETS = [
 
 export const GenerateDialog = ({ open, onClose, onGenerated }: Props) => {
   const [category, setCategory] = useState<Category>("daily");
-  const [difficulty, setDifficulty] = useState<Difficulty>(2);
+  const [difficulty, setDifficulty] = useState<Difficulty>(1);
   const [grammar, setGrammar] = useState<string>("");
   const [count, setCount] = useState<number>(20);
   const [loading, setLoading] = useState(false);
@@ -113,7 +113,7 @@ export const GenerateDialog = ({ open, onClose, onGenerated }: Props) => {
               onChange={(e) => setDifficulty(Number(e.target.value) as Difficulty)}
               disabled={loading}
             >
-              {([1, 2, 3, 4, 5] as Difficulty[]).map((d) => (
+              {([1, 2, 3] as Difficulty[]).map((d) => (
                 <option key={d} value={d}>
                   {DIFFICULTY_LABELS[d]}
                 </option>

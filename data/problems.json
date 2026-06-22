@@ -32,7 +32,7 @@
     "japanese": "もし時間があれば、一緒に映画を見に行きませんか？",
     "english": "If you have time, would you like to go see a movie together?",
     "category": "daily",
-    "difficulty": 3,
+    "difficulty": 1,
     "grammar": "条件文",
     "notes": "Would you like to ~ は丁寧な勧誘表現。",
     "tags": [
@@ -46,7 +46,7 @@
     "japanese": "このレポートは来週までに提出する必要があります。",
     "english": "This report needs to be submitted by next week.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "grammar": "受動態",
     "notes": "need to be + 過去分詞で「〜される必要がある」。",
     "tags": [
@@ -60,7 +60,7 @@
     "japanese": "もっと早く始めていればよかった。",
     "english": "I wish I had started earlier.",
     "category": "daily",
-    "difficulty": 4,
+    "difficulty": 2,
     "grammar": "仮定法過去完了",
     "notes": "I wish + 過去完了で過去への後悔を表す。",
     "tags": [
@@ -74,7 +74,7 @@
     "japanese": "このアプリは最新のAI技術を使って開発されました。",
     "english": "This app was developed using the latest AI technology.",
     "category": "it",
-    "difficulty": 3,
+    "difficulty": 1,
     "grammar": "受動態",
     "notes": "using 〜 は分詞構文で「〜を使って」を表す。",
     "tags": [
@@ -88,7 +88,7 @@
     "japanese": "彼が来るかどうかはまだわかりません。",
     "english": "I don't know yet whether he will come.",
     "category": "daily",
-    "difficulty": 3,
+    "difficulty": 1,
     "grammar": "間接疑問文",
     "notes": "whether は「〜かどうか」を表す接続詞。",
     "tags": [
@@ -101,7 +101,7 @@
     "japanese": "企業は、デジタル変革を推進するために、クラウドベースのソリューションへの移行を加速させています。",
     "english": "Companies are accelerating their migration to cloud-based solutions to drive digital transformation.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「デジタル変革 (digital transformation)」や「クラウドベースのソリューション (cloud-based solutions)」は現代ITの重要語彙です。「〜を推進する (drive)」はビジネスでよく使われる動詞です。",
     "tags": [
       "ビジネスIT",
@@ -115,7 +115,7 @@
     "japanese": "データ漏洩の脅威が増大する中、組織は堅牢なサイバーセキュリティ対策を講じる必要があります。",
     "english": "Amidst the growing threat of data breaches, organizations must implement robust cybersecurity measures.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「amidst (〜の最中に)」はややフォーマルな前置詞で、進行中の状況を表します。「robust measures (堅牢な対策)」はビジネス英語で頻出するコロケーションです。",
     "tags": [
       "サイバーセキュリティ",
@@ -129,7 +129,7 @@
     "japanese": "機械学習モデルの精度は、大量かつ質の高いデータセットによって大幅に向上させることができます。",
     "english": "The accuracy of machine learning models can be significantly enhanced through large and high-quality datasets.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「significantly enhanced (大幅に向上させる)」は、効果や改善を強調する際に使われる表現です。「through (〜によって)」は手段を表します。",
     "tags": [
       "AI",
@@ -143,7 +143,7 @@
     "japanese": "アジャイル開発手法を採用することで、チームは変化する要件に迅速に対応し、高品質なソフトウェアを継続的に提供できます。",
     "english": "By adopting agile development methodologies, teams can rapidly respond to changing requirements and continuously deliver high-quality software.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「By + 動名詞 (〜することで)」は手段を示す一般的な表現です。「rapidly respond (迅速に対応する)」や「continuously deliver (継続的に提供する)」は、ビジネスにおける効率性を表すのに適しています。",
     "tags": [
       "ソフトウェア開発",
@@ -157,7 +157,7 @@
     "japanese": "モノのインターネット（IoT）デバイスは、リアルタイムデータを収集・分析することで、産業オートメーションの効率を劇的に向上させる可能性を秘めています。",
     "english": "Internet of Things (IoT) devices have the potential to dramatically improve the efficiency of industrial automation by collecting and analyzing real-time data.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「have the potential to (〜する可能性を秘めている)」は未来の可能性を述べる際に便利です。「dramatically improve (劇的に向上させる)」は大きな変化を強調します。",
     "tags": [
       "IoT",
@@ -171,7 +171,7 @@
     "japanese": "サービスの可用性を最大化するためには、冗長性のあるクラウドインフラストラクチャを設計することが不可欠です。",
     "english": "Designing redundant cloud infrastructure is essential to maximize service availability.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「redundant infrastructure (冗長性のあるインフラ)」はITシステム設計において重要な概念です。「essential to (〜に不可欠な)」は必要性を強調する表現です。",
     "tags": [
       "クラウド",
@@ -185,7 +185,7 @@
     "japanese": "ビッグデータ分析は、顧客行動の予測、市場トレンドの特定、そして新たなビジネス機会の創出において極めて重要な役割を果たします。",
     "english": "Big data analytics plays a pivotal role in predicting customer behavior, identifying market trends, and creating new business opportunities.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「play a pivotal role in (〜において極めて重要な役割を果たす)」は上級レベルの表現です。inの後には、動名詞が並列で続きます。",
     "tags": [
       "ビッグデータ",
@@ -199,7 +199,7 @@
     "japanese": "多くの企業が、レガシーシステムからモダンなクラウドネイティブアーキテクチャへの移行に課題を抱えています。",
     "english": "Many companies are facing challenges in migrating from legacy systems to modern cloud-native architectures.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「face challenges in (〜に課題を抱える)」はビジネスでよく使われる表現です。「legacy systems (レガシーシステム)」と「cloud-native architectures (クラウドネイティブアーキテクチャ)」はIT分野の専門用語です。",
     "tags": [
       "デジタルトランスフォーメーション",
@@ -213,7 +213,7 @@
     "japanese": "AIシステムの急速な普及に伴い、その倫理的な側面、特にプライバシーと公平性に関する議論が活発化しています。",
     "english": "With the rapid proliferation of AI systems, discussions regarding their ethical implications, particularly concerning privacy and fairness, are becoming more active.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「proliferation (普及、拡散)」は高度な語彙です。「ethical implications (倫理的な側面)」や「concerning (〜に関して)」もビジネスや学術的な文脈でよく用いられます。",
     "tags": [
       "AI倫理",
@@ -227,7 +227,7 @@
     "japanese": "DevOps文化を導入することで、開発チームと運用チーム間の連携が強化され、ソフトウェアのリリースサイクルが大幅に短縮されます。",
     "english": "Implementing a DevOps culture enhances collaboration between development and operations teams, significantly shortening software release cycles.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "文頭の動名詞「Implementing」は「〜すること」を意味し、結果を引き起こす原因を表します。「enhance collaboration (連携を強化する)」や「shorten release cycles (リリースサイクルを短縮する)」はビジネス効率化に関する表現です。",
     "tags": [
       "DevOps",
@@ -241,7 +241,7 @@
     "japanese": "顧客のデータプライバシーを保護するために、私たちは厳格なデータガバナンスポリシーを遵守する必要があります。",
     "english": "To protect customer data privacy, we must adhere to stringent data governance policies.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"adhere to\" は「〜を遵守する」という意味で、ビジネスシーンでよく使われる表現です。\"stringent\" は「厳格な」という、やや硬い表現です。",
     "tags": [
       "ビジネス英語",
@@ -255,7 +255,7 @@
     "japanese": "マイクロサービスアーキテクチャの導入は、システムのスケーラビリティと保守性を大幅に向上させることが期待されます。",
     "english": "Implementing a microservices architecture is expected to significantly enhance system scalability and maintainability.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"enhance\" は「高める、向上させる」というフォーマルな動詞です。\"scalability\"（拡張性）と \"maintainability\"（保守性）はIT分野で頻出の専門用語です。",
     "tags": [
       "IT専門用語",
@@ -269,7 +269,7 @@
     "japanese": "開発プロセスに継続的インテグレーションと継続的デリバリー (CI/CD) パイプラインを組み込むことで、バグを早期に発見し、デプロイメントの頻度を高めることができます。",
     "english": "Incorporating Continuous Integration and Continuous Delivery (CI/CD) pipelines into the development process allows for early bug detection and increased deployment frequency.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"incorporate A into B\" で「AをBに組み込む」という意味です。\"allows for\" は「〜を可能にする」という表現で、\"enable\" とも言い換えられます。",
     "tags": [
       "開発手法",
@@ -283,7 +283,7 @@
     "japanese": "サーバーレスコンピューティングは、インフラ管理の負担を軽減し、開発者がアプリケーションロジックに集中できるようにします。",
     "english": "Serverless computing alleviates the burden of infrastructure management, allowing developers to focus on application logic.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"alleviate\" は「軽減する、和らげる」というやや硬い動詞です。\"allow A to do B\" の構文は頻出です。",
     "tags": [
       "クラウド技術",
@@ -297,7 +297,7 @@
     "japanese": "ブロックチェーン技術は、分散型台帳システムを通じて、トランザクションの透明性と不変性を保証します。",
     "english": "Blockchain technology ensures the transparency and immutability of transactions through a decentralized ledger system.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"ensure\" は「保証する、確実にする」という意味です。\"immutability\"（不変性）や \"decentralized ledger system\"（分散型台帳システム）はブロックチェーン関連の専門用語です。",
     "tags": [
       "先端技術",
@@ -311,7 +311,7 @@
     "japanese": "エッジコンピューティングの採用により、データ処理がデータソースにより近い場所で行われるため、レイテンシが大幅に削減されます。",
     "english": "Adopting edge computing significantly reduces latency by performing data processing closer to the data source.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"adopt\" は「採用する」という意味で、技術や方針の導入によく使われます。\"latency\"（遅延）はネットワークやデータ処理の文脈で重要な専門用語です。",
     "tags": [
       "クラウド技術",
@@ -325,7 +325,7 @@
     "japanese": "既存のレガシーシステムを最新のクラウド環境へ移行する際には、互換性の問題とデータ移行の複雑性が避けられない課題として立ちはだかります。",
     "english": "When migrating existing legacy systems to a modern cloud environment, compatibility issues and data migration complexities present unavoidable challenges.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"present a challenge\" は「課題を突きつける、課題となる」という表現です。\"complexities\" は「複雑さ」という名詞で、複数形にすることで様々な複雑な側面を指します。",
     "tags": [
       "IT課題",
@@ -339,7 +339,7 @@
     "japanese": "機械学習モデルのバイアスを特定し軽減することは、公正で信頼性の高いAIシステムを構築するために不可欠です。",
     "english": "Identifying and mitigating bias in machine learning models is crucial for building fair and reliable AI systems.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"mitigate\" は「軽減する、和らげる」という意味で、リスクや問題に対して使われます。\"crucial\" は \"essential\" と同様に「極めて重要な」という意味です。",
     "tags": [
       "AI倫理",
@@ -353,7 +353,7 @@
     "japanese": "組織は、サービス停止やデータ損失のリスクを最小限に抑えるために、災害復旧計画と事業継続計画を策定する必要があります。",
     "english": "Organizations need to formulate disaster recovery and business continuity plans to minimize the risk of service outages and data loss.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"formulate\" は「策定する、明確に述べる」というやや硬い動詞です。\"service outage\"（サービス停止）や \"business continuity\"（事業継続）はビジネスITで頻出の専門用語です。",
     "tags": [
       "リスク管理",
@@ -367,7 +367,7 @@
     "japanese": "サイバー攻撃の高度化に対応するため、多要素認証（MFA）の導入やゼロトラストセキュリティモデルの採用が推奨されます。",
     "english": "To counter increasingly sophisticated cyberattacks, implementing multi-factor authentication (MFA) and adopting a Zero Trust security model are recommended.",
     "category": "it",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"counter\" は「〜に対処する、対抗する」という意味です。\"sophisticated\" は「高度な、洗練された」という形容詞です。\"Zero Trust\" は最新のセキュリティ概念です。",
     "tags": [
       "サイバーセキュリティ",
@@ -381,7 +381,7 @@
     "japanese": "免税範囲を超過する品物がある場合、事前に申告する必要があります。",
     "english": "Should you have items exceeding the duty-free allowance, you are required to declare them beforehand.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"Should you have...\" は \"If you have...\" のよりフォーマルで仮定的な表現です。\"duty-free allowance\" は「免税範囲」を指します。",
     "tags": [
       "conditional (inverted)",
@@ -395,7 +395,7 @@
     "japanese": "この街は隠れた名所がたくさんあると聞いていますが、地元の人にしか知られていないような場所でおすすめはありますか？",
     "english": "I've heard this city boasts numerous hidden gems; do you have any recommendations for places only known to locals?",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"boasts numerous hidden gems\" は「多くの隠れた名所がある」という詩的で洗練された表現です。",
     "tags": [
       "present perfect",
@@ -409,7 +409,7 @@
     "japanese": "残念ながら、私の預けた荷物がまだターンテーブルに出てこないのですが、どこに問い合わせればよいでしょうか？",
     "english": "Unfortunately, my checked luggage hasn't appeared on the carousel yet. Could you advise me where to inquire?",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"checked luggage\" は「預け入れ荷物」です。\"advise me where to inquire\" は丁寧な尋ね方です。",
     "tags": [
       "present perfect",
@@ -423,7 +423,7 @@
     "japanese": "予約なしでこのレストランに入れるかどうか、現時点では何とも言えません。",
     "english": "Whether we can get into this restaurant without a reservation remains to be seen at this point.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"remains to be seen\" は「まだ分からない」「今後の成り行き次第」という意味の慣用表現です。",
     "tags": [
       "idiom",
@@ -437,7 +437,7 @@
     "japanese": "交通渋滞に見舞われる可能性を考慮すると、出発時刻を早めるべきかもしれません。",
     "english": "Considering the potential for encountering heavy traffic, we might want to move our departure time forward.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"encountering heavy traffic\" は「交通渋滞に遭う」という表現です。\"move our departure time forward\" は「出発時間を早める」です。",
     "tags": [
       "gerund phrase",
@@ -451,7 +451,7 @@
     "japanese": "このホテルは全室オーシャンビューだということでしたが、私の部屋からはわずかに海が見えるだけです。",
     "english": "This hotel was advertised as having all ocean-view rooms, but my room offers only a partial glimpse of the sea.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"advertised as having\" は「〜として宣伝されていた」という受動態表現です。\"partial glimpse\" は「わずかに見える」というニュアンスです。",
     "tags": [
       "passive voice",
@@ -465,7 +465,7 @@
     "japanese": "万が一、旅先で緊急事態が発生した場合は、最寄りの大使館または領事館に連絡してください。",
     "english": "In the unlikely event of an emergency during your travels, please contact your nearest embassy or consulate.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"In the unlikely event of...\" は「万が一〜の場合には」という、可能性が低い仮定を表す定型表現です。",
     "tags": [
       "fixed expression",
@@ -479,7 +479,7 @@
     "japanese": "海外ではチップの習慣が異なるため、現地の慣習を事前に調べておくのが賢明です。",
     "english": "As tipping customs vary internationally, it would be prudent to research local practices beforehand.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"it would be prudent to do X\" は「Xをするのが賢明だろう」という少しフォーマルな助言表現です。\"prudent\" は「慎重な、賢明な」という意味です。",
     "tags": [
       "subordinate clause",
@@ -493,7 +493,7 @@
     "japanese": "この旅行は、私の異文化理解を深める上でかけがえのない経験となりました。",
     "english": "This trip proved to be an invaluable experience in deepening my understanding of different cultures.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"proved to be an invaluable experience\" は「かけがえのない経験であることが分かった/証明された」という表現です。\"deepening my understanding\" は「理解を深める」という意味です。",
     "tags": [
       "verb + infinitive",
@@ -507,7 +507,7 @@
     "japanese": "予約したツアーの集合場所が見つからないのですが、どちらの方向でしょうか？",
     "english": "I'm having trouble locating the meeting point for my booked tour; could you point me in the right direction?",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "\"having trouble locating\" は「〜を見つけるのに苦労している」という表現です。\"point me in the right direction\" は「方向を教えてくれる」という慣用表現です。",
     "tags": [
       "gerund",
@@ -521,7 +521,7 @@
     "japanese": "提案書は金曜日までに送っていただけますか？",
     "english": "Could you please send us the proposal by Friday?",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「〜まで」はbyを使うと期限を表します。",
     "tags": [
       "依頼",
@@ -535,7 +535,7 @@
     "japanese": "新しいプロジェクトの進捗はどうですか？",
     "english": "How is the new project progressing?",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "progressは動詞としても使えます。進行中の状況を尋ねる表現です。",
     "tags": [
       "状況確認",
@@ -549,7 +549,7 @@
     "japanese": "この件について、いくつか質問があります。",
     "english": "I have a few questions regarding this matter.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"regarding\" は「〜に関して」という意味でビジネスでよく使われます。",
     "tags": [
       "表現",
@@ -563,7 +563,7 @@
     "japanese": "恐れ入りますが、もう一度おっしゃっていただけますか？",
     "english": "Excuse me, could you please repeat that?",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "相手に聞き返す丁寧な表現です。\"Excuse me\"で切り出し、\"could you please\"で丁寧に依頼します。",
     "tags": [
       "依頼",
@@ -577,7 +577,7 @@
     "japanese": "データを分析して、結果を報告してください。",
     "english": "Please analyze the data and report the results.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "命令形ですが、ビジネスシーンでは「〜してください」という依頼として使われます。",
     "tags": [
       "命令形",
@@ -591,7 +591,7 @@
     "japanese": "彼の不在中は、私が担当します。",
     "english": "I will be in charge during his absence.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"be in charge of\" で「〜を担当する」という意味です。\"absence\" は「不在」です。",
     "tags": [
       "担当",
@@ -605,7 +605,7 @@
     "japanese": "ご不便をおかけして申し訳ありません。",
     "english": "We apologize for any inconvenience.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"inconvenience\" は「不便、迷惑」という意味で、ビジネスで謝罪の際によく使われます。",
     "tags": [
       "謝罪",
@@ -619,7 +619,7 @@
     "japanese": "この問題には早急に対処する必要があります。",
     "english": "We need to address this issue promptly.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"address\" は「対処する」という意味で、\"promptly\" は「迅速に、早急に」です。",
     "tags": [
       "必要性",
@@ -633,7 +633,7 @@
     "japanese": "締め切りは来月末です。",
     "english": "The deadline is the end of next month.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「月末」は \"the end of the month\"、特定の月の場合は \"the end of [月名]\" を使います。",
     "tags": [
       "期限",
@@ -647,7 +647,7 @@
     "japanese": "詳細は後ほどメールでお送りします。",
     "english": "I will send you the details by email later.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"details\" は複数形で「詳細」を意味します。\"by email\"で「メールで」という手段を表します。",
     "tags": [
       "未来形",
@@ -661,7 +661,7 @@
     "japanese": "来週、新しい戦略について話し合いましょう。",
     "english": "Let's discuss the new strategy next week.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"discuss\" は他動詞なので、\"about\" は不要です。",
     "tags": [
       "提案",
@@ -675,7 +675,7 @@
     "japanese": "彼の意見に賛成です。",
     "english": "I agree with his opinion.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"agree with\" で「〜に賛成する」という表現です。",
     "tags": [
       "意見",
@@ -689,7 +689,7 @@
     "japanese": "予算の制約があることをご理解ください。",
     "english": "Please understand that there are budget constraints.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"constraint\" は「制約、制限」という意味です。\"there are\" は存在を表します。",
     "tags": [
       "状況説明",
@@ -703,7 +703,7 @@
     "japanese": "この情報を社内で共有してください。",
     "english": "Please share this information internally.",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"internally\" は「社内で、内部的に」という意味の副詞です。",
     "tags": [
       "依頼",
@@ -717,7 +717,7 @@
     "japanese": "どのような成果を期待していますか？",
     "english": "What kind of results are you expecting?",
     "category": "business",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"expect\" は「期待する」という意味です。進行形を使って現在の期待を尋ねます。",
     "tags": [
       "期待",
@@ -731,7 +731,7 @@
     "japanese": "明日、友達と映画を見に行く予定です。",
     "english": "I'm planning to go see a movie with my friends tomorrow.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"be planning to do\" は「〜する予定である」という未来の予定を表す一般的な表現です。",
     "tags": [
       "未来形",
@@ -745,7 +745,7 @@
     "japanese": "もし時間があれば、そのプロジェクトを手伝うことができます。",
     "english": "If I have time, I can help you with that project.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"If I have time\" は条件を表す節で、未来のことでも現在形を使います。",
     "tags": [
       "条件節",
@@ -759,7 +759,7 @@
     "japanese": "彼はいつも時間通りに現れるので、信頼できます。",
     "english": "He always shows up on time, so he's reliable.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"show up\" は「現れる、姿を見せる」という意味の句動詞です。",
     "tags": [
       "句動詞",
@@ -773,7 +773,7 @@
     "japanese": "最近、健康のために毎日ジョギングをしています。",
     "english": "Recently, I've been jogging every day for my health.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"have been -ing\" は「ずっと〜している」という継続を表す現在完了進行形です。",
     "tags": [
       "現在完了進行形",
@@ -787,7 +787,7 @@
     "japanese": "その本はとても面白かったので、一晩で読み終えました。",
     "english": "The book was so interesting that I finished reading it in one night.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"so...that...\" は「とても〜なので…」という結果を表す構文です。",
     "tags": [
       "結果構文",
@@ -801,7 +801,7 @@
     "japanese": "申し訳ありませんが、あなたの意見には賛成できません。",
     "english": "I'm sorry, but I can't agree with your opinion.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"agree with\" は「〜に賛成する」という意味で、前置詞 \"with\" を使います。",
     "tags": [
       "意見",
@@ -815,7 +815,7 @@
     "japanese": "私はコーヒーよりもお茶を飲む方が好きです。",
     "english": "I prefer drinking tea to coffee.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"prefer A to B\" は「BよりもAを好む」という比較の表現です。",
     "tags": [
       "比較",
@@ -829,7 +829,7 @@
     "japanese": "この機械は操作が簡単で、誰でも使えます。",
     "english": "This machine is easy to operate, and anyone can use it.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"easy to operate\" のように、形容詞の後に不定詞を続けることで「〜するのが簡単だ」という意味になります。",
     "tags": [
       "不定詞",
@@ -843,7 +843,7 @@
     "japanese": "彼がなぜ遅れたのか、理由が分かりません。",
     "english": "I don't know why he was late.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「〜する理由」は \"the reason why...\" または \"why...\" の名詞節で表現できます。",
     "tags": [
       "疑問詞節",
@@ -857,7 +857,7 @@
     "japanese": "雨が降る前に家を出るべきだった。",
     "english": "I should have left home before it rained.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"should have done\" は「〜すべきだったのに（しなかった）」という後悔や非難を表します。",
     "tags": [
       "助動詞",
@@ -871,7 +871,7 @@
     "japanese": "彼女は歌手になるという夢を諦めませんでした。",
     "english": "She didn't give up her dream of becoming a singer.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"give up\" は「諦める」という意味の句動詞です。\"dream of -ing\" は「〜するという夢」です。",
     "tags": [
       "句動詞",
@@ -885,7 +885,7 @@
     "japanese": "そのレストランはいつも混んでいるので、予約した方がいいでしょう。",
     "english": "That restaurant is always crowded, so you'd better make a reservation.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"had better do\" は「〜した方がよい」という強い忠告を表します。",
     "tags": [
       "助動詞",
@@ -899,7 +899,7 @@
     "japanese": "ドアが開いたままになっていたので、誰かが入ってきたのかもしれません。",
     "english": "The door was left open, so someone might have come in.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"leave something open\" は「〜を開けたままにする」です。\"might have done\" は「〜したかもしれない」という過去の推量を表します。",
     "tags": [
       "受動態",
@@ -913,7 +913,7 @@
     "japanese": "私は電車を乗り間違えて、違う駅に着いてしまいました。",
     "english": "I took the wrong train and ended up at a different station.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"take the wrong train\" は「電車を乗り間違える」という決まった表現です。\"end up -ing / at somewhere\" は「結局〜になる、〜に着く」です。",
     "tags": [
       "交通",
@@ -927,7 +927,7 @@
     "japanese": "どれくらいの頻度で運動しますか？",
     "english": "How often do you exercise?",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "\"How often\" は「どれくらいの頻度で」と頻度を尋ねる疑問詞です。",
     "tags": [
       "疑問詞",
@@ -941,7 +941,7 @@
     "japanese": "チェックインは何時まで可能ですか？",
     "english": "What time is the latest I can check in?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「〜まで」という時間制限は 'by' や 'until' を使って表現できますが、ここでは「一番遅くいつまで」というニュアンスで 'the latest' を使っています。",
     "tags": [
       "時間表現",
@@ -955,7 +955,7 @@
     "japanese": "一番近い地下鉄の駅はどこですか？",
     "english": "Where is the nearest subway station?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Nearest' は「最も近い」という意味の最上級です。場所を尋ねる際によく使う表現です。",
     "tags": [
       "場所を尋ねる",
@@ -969,7 +969,7 @@
     "japanese": "この美術館の入場料はいくらですか？",
     "english": "How much is the admission fee for this museum?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Admission fee' は「入場料」という意味の複合名詞です。値段を尋ねる際は 'How much is...?' を使います。",
     "tags": [
       "値段を尋ねる",
@@ -983,7 +983,7 @@
     "japanese": "おすすめの地元の料理はありますか？",
     "english": "Do you have any recommendations for local dishes?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Recommendation' は「おすすめ」という意味の名詞です。'Local dishes' で「郷土料理」を表します。",
     "tags": [
       "勧誘",
@@ -997,7 +997,7 @@
     "japanese": "次のバスはいつ出発しますか？",
     "english": "When does the next bus depart?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Depart' は「出発する」という意味の動詞です。公共交通機関の時刻を尋ねる際によく使われます。",
     "tags": [
       "現在形",
@@ -1011,7 +1011,7 @@
     "japanese": "Wi-Fiは無料で利用できますか？",
     "english": "Is Wi-Fi available for free?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Available for free' で「無料で利用可能」という意味になります。よくある質問の一つです。",
     "tags": [
       "受動態",
@@ -1025,7 +1025,7 @@
     "japanese": "部屋のエアコンが動かないのですが。",
     "english": "The air conditioner in my room isn't working.",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Isn't working' は「作動していない」「故障している」という意味で、機械の不具合を伝える際によく使います。",
     "tags": [
       "現在進行形",
@@ -1039,7 +1039,7 @@
     "japanese": "明日の夜、二人分のテーブルを予約したいのですが。",
     "english": "I'd like to reserve a table for two tomorrow evening.",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'I'd like to...' は「〜したいのですが」という丁寧な依頼や願望を伝える表現です。",
     "tags": [
       "丁寧な依頼",
@@ -1053,7 +1053,7 @@
     "japanese": "この地図で、私が今いる場所を教えていただけますか？",
     "english": "Could you show me where I am on this map?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Could you show me...?' は丁寧な依頼です。'where I am' は間接疑問文で、「私がどこにいるか」という意味です。",
     "tags": [
       "丁寧な依頼",
@@ -1067,7 +1067,7 @@
     "japanese": "この辺りでおすすめの観光スポットはありますか？",
     "english": "Are there any recommended sightseeing spots around here?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Recommended sightseeing spots' で「おすすめの観光スポット」です。'Around here' は「この辺り」を意味します。",
     "tags": [
       "おすすめ",
@@ -1081,7 +1081,7 @@
     "japanese": "このツアーはどのくらいの長さですか？",
     "english": "How long does this tour last?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'How long...?' は期間を尋ねる質問です。動詞 'last' は「続く」という意味です。",
     "tags": [
       "期間を尋ねる",
@@ -1095,7 +1095,7 @@
     "japanese": "クレジットカードは使えますか？",
     "english": "Do you accept credit cards?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Accept' は「受け入れる」という意味で、支払い方法を尋ねる際によく使われる動詞です。",
     "tags": [
       "支払い",
@@ -1109,7 +1109,7 @@
     "japanese": "お土産を買えるお店は近くにありますか？",
     "english": "Is there a shop nearby where I can buy souvenirs?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Nearby' は「近くに」という副詞です。'where I can buy souvenirs' は関係副詞節で 'shop' を修飾しています。",
     "tags": [
       "関係副詞",
@@ -1123,7 +1123,7 @@
     "japanese": "この国では、チップは習慣ですか？",
     "english": "Is tipping customary in this country?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Customary' は「習慣的な、慣習的な」という意味の形容詞です。'Tipping' は動名詞で「チップを渡すこと」を意味します。",
     "tags": [
       "文化",
@@ -1137,7 +1137,7 @@
     "japanese": "お腹が痛いのですが、薬局はどこですか？",
     "english": "I have a stomachache. Where is the nearest pharmacy?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Have a stomachache' で「お腹が痛い」という意味です。'Pharmacy' は「薬局」です。",
     "tags": [
       "体調不良",
@@ -1151,7 +1151,7 @@
     "japanese": "タクシーを呼んでいただけますか？",
     "english": "Could you call a taxi for me?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Call a taxi' で「タクシーを呼ぶ」という意味です。'Could you...?' は丁寧な依頼表現です。",
     "tags": [
       "丁寧な依頼",
@@ -1165,7 +1165,7 @@
     "japanese": "荷物を一時的に預かってもらえますか？",
     "english": "Can I leave my luggage here temporarily?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Leave one's luggage' で「荷物を預ける」です。'Temporarily' は「一時的に」という副詞です。",
     "tags": [
       "依頼",
@@ -1179,7 +1179,7 @@
     "japanese": "この街の夜景は本当に素晴らしいですね。",
     "english": "The night view of this city is truly magnificent.",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Truly magnificent' は「本当に素晴らしい」という意味で、感想を伝える際に使われる表現です。",
     "tags": [
       "感想",
@@ -1193,7 +1193,7 @@
     "japanese": "明日はどこかへ出かける予定ですか？",
     "english": "Are you planning to go somewhere tomorrow?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Plan to do something' で「〜する予定である」という意味です。'Somewhere' は「どこかへ」という意味の副詞です。",
     "tags": [
       "予定",
@@ -1207,7 +1207,7 @@
     "japanese": "このチケットで何回でも乗り降りできますか？",
     "english": "Can I get on and off as many times as I want with this ticket?",
     "category": "travel",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "'Get on and off' で「乗り降りする」という意味です。'As many times as I want' は「好きなだけ何度でも」という許可や自由を表す表現です。",
     "tags": [
       "許可",
@@ -1221,7 +1221,7 @@
     "japanese": "現地の文化に深く触れるために、伝統的なホームステイを体験することにしました。",
     "english": "To immerse myself in the local culture, I decided to try a traditional homestay experience.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「〜に没頭する、深く関わる」は immerse oneself in を使います。to 不定詞が目的を表します。",
     "tags": [
       "to不定詞",
@@ -1235,7 +1235,7 @@
     "japanese": "乗り継ぎ便の時間が短すぎて、手荷物が最終目的地まで届かないのではないかと心配です。",
     "english": "I'm concerned that my luggage might not make it to the final destination due to the extremely short layover.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「乗り継ぎ時間」は layover です。make it to は「〜にたどり着く、間に合う」という意味で使われます。",
     "tags": [
       "might動詞",
@@ -1249,7 +1249,7 @@
     "japanese": "事前の情報収集が不十分だったため、この観光地がオフシーズンであることを知らずに来てしまいました。",
     "english": "Due to insufficient research beforehand, I didn't realize that this tourist spot was in its off-season until I arrived.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「情報収集不足」は insufficient research です。off-season は「オフシーズン、閑散期」を意味します。",
     "tags": [
       "原因結果",
@@ -1263,7 +1263,7 @@
     "japanese": "ホテル滞在中、客室の金庫が故障しており、貴重品の保管に不安を感じました。",
     "english": "During my stay at the hotel, the in-room safe was out of order, which made me feel uneasy about storing my valuables.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "「故障している」は out of order です。feel uneasy about で「〜に不安を感じる」と表現します。",
     "tags": [
       "受動態",
@@ -1277,7 +1277,7 @@
     "japanese": "予想外の出費が重なり、旅行予算を大幅にオーバーしてしまいそうです。",
     "english": "Unexpected expenses have piled up, and it looks like I'm going to significantly exceed my travel budget.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "pile up は「積み重なる」という意味です。exceed は「〜を超える」という動詞です。",
     "tags": [
       "現在完了",
@@ -1291,7 +1291,7 @@
     "japanese": "この地域の公共交通機関は非常に発達しており、レンタカーがなくても問題なく観光できます。",
     "english": "The public transportation in this region is highly developed, so you can sightsee without any problems even without a rental car.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "highly developed は「非常に発達した」という意味です。sightsee は「観光する」という動詞です。",
     "tags": [
       "原因結果",
@@ -1305,7 +1305,7 @@
     "japanese": "旅程の変更を余儀なくされたにもかかわらず、旅行保険が適用されるか不明です。",
     "english": "Despite being forced to change my itinerary, it's unclear whether my travel insurance will cover it.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "be forced to は「〜せざるを得ない」という受動態表現です。unclear whether で「〜かどうか不明」となります。",
     "tags": [
       "受動態",
@@ -1319,7 +1319,7 @@
     "japanese": "空港での入国審査に予想以上に時間がかかり、次のフライトに間に合うかハラハラしました。",
     "english": "Immigration at the airport took much longer than expected, and I was on pins and needles wondering if I'd make my connecting flight.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "on pins and needles は「ハラハラして、いらいらして」という慣用句です。make a flight は「フライトに間に合う」という意味です。",
     "tags": [
       "比較級",
@@ -1333,7 +1333,7 @@
     "japanese": "現地ツアーガイドが歴史的背景を詳しく説明してくれたおかげで、遺跡への理解が深まりました。",
     "english": "Thanks to the local tour guide who explained the historical background in detail, my understanding of the ruins deepened.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "thanks to は「〜のおかげで」という表現です。deepen one's understanding は「理解を深める」です。",
     "tags": [
       "関係代名詞",
@@ -1347,7 +1347,7 @@
     "japanese": "旅の終わりに、現地の素晴らしい景色を目に焼き付けるために、展望台に立ち寄ることにしました。",
     "english": "To engrave the magnificent local scenery in my memory at the end of the trip, I decided to stop by the observation deck.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "engrave in one's memory は「〜を記憶に刻む、目に焼き付ける」という表現です。observation deck は「展望台」です。",
     "tags": [
       "to不定詞",
@@ -1361,7 +1361,7 @@
     "japanese": "この地域を訪れる観光客は、絶景を求めてハイキングコースを辿るのが一般的です。",
     "english": "Tourists visiting this region commonly follow the hiking trails in search of breathtaking views.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "in search of は「〜を求めて」という表現です。breathtaking views は「息をのむような絶景」です。",
     "tags": [
       "分詞構文",
@@ -1375,7 +1375,7 @@
     "japanese": "予期せぬ悪天候により、予定していたクルーズツアーがキャンセルになってしまいました。",
     "english": "Due to unexpected bad weather, our planned cruise tour was canceled.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "due to は「〜のために、〜が原因で」という理由を表す表現です。was canceled は受動態です。",
     "tags": [
       "受動態",
@@ -1389,7 +1389,7 @@
     "japanese": "このホテルのアメニティは非常に充実しており、長期滞在でも快適に過ごせそうです。",
     "english": "The amenities at this hotel are so comprehensive that I think I can have a comfortable long-term stay.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "comprehensive は「包括的な、充実した」という意味です。so...that 構文で「〜なので…」と表現します。",
     "tags": [
       "so...that構文",
@@ -1403,7 +1403,7 @@
     "japanese": "現地通貨への両替は空港よりも市内の銀行の方がレートが良いことが多いです。",
     "english": "The exchange rate for converting to local currency is often better at banks in the city than at the airport.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "exchange rate は「為替レート」です。better than で比較を表します。",
     "tags": [
       "比較級",
@@ -1417,7 +1417,7 @@
     "japanese": "旅行中に体調を崩してしまい、予定していた観光スポットをいくつか諦めざるを得ませんでした。",
     "english": "I fell ill during my trip and was forced to skip some of the sightseeing spots I had planned to visit.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "fall ill は「病気になる」という表現です。be forced to skip で「〜を諦めざるを得なかった」です。",
     "tags": [
       "受動態",
@@ -1431,7 +1431,7 @@
     "japanese": "この旅行は、日常の喧騒から離れてリラックスする絶好の機会となりました。",
     "english": "This trip provided an excellent opportunity to unwind and escape the hustle and bustle of daily life.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "unwind は「くつろぐ、リラックスする」という意味です。hustle and bustle は「喧騒」を意味する慣用句です。",
     "tags": [
       "to不定詞",
@@ -1445,7 +1445,7 @@
     "japanese": "現地の交通ルールは日本と大きく異なるため、レンタカーを運転する際は細心の注意が必要です。",
     "english": "Since local traffic rules differ significantly from those in Japan, extreme caution is required when driving a rental car.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "differ significantly from は「〜と大きく異なる」という表現です。extreme caution は「細心の注意」です。",
     "tags": [
       "接続詞",
@@ -1459,7 +1459,7 @@
     "japanese": "チェックアウト後もフライトまで時間があるので、荷物を預かってもらえたら助かります。",
     "english": "Since I have some time until my flight after checking out, it would be a great help if you could store my luggage.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "it would be a great help if は「〜していただけると大変助かります」という丁寧な依頼表現です。",
     "tags": [
       "仮定法",
@@ -1473,7 +1473,7 @@
     "japanese": "この博物館の展示は多岐にわたり、一日ではとても見きれないほどの充実ぶりでした。",
     "english": "The exhibits at this museum were so diverse and extensive that it was impossible to see them all in a single day.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "diverse and extensive は「多岐にわたり、広範囲にわたる」という意味です。impossible to see them all は「全てを見るのは不可能」です。",
     "tags": [
       "so...that構文",
@@ -1487,7 +1487,7 @@
     "japanese": "治安の悪い地域では、人目を引く行動を避け、貴重品は肌身離さず持っているべきです。",
     "english": "In areas with poor public safety, you should avoid drawing attention to yourself and keep your valuables close to you.",
     "category": "travel",
-    "difficulty": 4,
+    "difficulty": 2,
     "notes": "draw attention to oneself は「人目を引く」という意味です。keep valuables close to you は「貴重品を肌身離さず持つ」です。",
     "tags": [
       "助動詞",
@@ -1501,7 +1501,7 @@
     "japanese": "彼は新しい仕事にすぐに慣れるだろう。",
     "english": "He will get used to his new job quickly.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～に慣れる」はget used toまたはbe used toを使います。get used toは慣れる過程、be used toは慣れている状態を表します。",
     "tags": [
       "句動詞",
@@ -1515,7 +1515,7 @@
     "japanese": "彼女は昨日、スマートフォンをどこかに置き忘れたに違いない。",
     "english": "She must have left her smartphone somewhere yesterday.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "過去の推量には「must have + 過去分詞」を使います。強い確信を表します。",
     "tags": [
       "助動詞",
@@ -1529,7 +1529,7 @@
     "japanese": "もし私がもっと早く出発していたら、渋滞に巻き込まれなかっただろう。",
     "english": "If I had left earlier, I wouldn't have been caught in traffic.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "過去の事実に反する仮定を表す仮定法過去完了の構文です。",
     "tags": [
       "仮定法過去完了",
@@ -1542,7 +1542,7 @@
     "japanese": "その問題は、思ったよりも解決するのが難しかった。",
     "english": "The problem was more difficult to solve than I had expected.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "比較級を使った表現です。「～するのに難しい」は「difficult to do」の形で表現します。",
     "tags": [
       "比較級",
@@ -1555,7 +1555,7 @@
     "japanese": "彼が何を言いたかったのか、私には全く理解できませんでした。",
     "english": "I couldn't understand at all what he was trying to say.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "間接疑問文の語順に注意しましょう。「at all」は否定文を強調する際に使われます。",
     "tags": [
       "間接疑問文",
@@ -1568,7 +1568,7 @@
     "japanese": "そのニュースを聞いて、彼女はとても驚いたようだった。",
     "english": "She seemed very surprised to hear the news.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～して驚く」は「surprised to do」の形で感情の原因を表します。「～のようだ」は「seem」を使います。",
     "tags": [
       "不定詞",
@@ -1581,7 +1581,7 @@
     "japanese": "私は来週、海外出張に行くことになっています。",
     "english": "I am supposed to go on a business trip overseas next week.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～することになっている」「～するはずだ」は「be supposed to do」が自然な表現です。",
     "tags": [
       "be supposed to",
@@ -1594,7 +1594,7 @@
     "japanese": "彼らは新しいプロジェクトについて話し合うために会議を開いた。",
     "english": "They held a meeting to discuss the new project.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "目的を表す不定詞（to do）を使います。「discuss」は他動詞なので前置詞は不要です。",
     "tags": [
       "不定詞",
@@ -1607,7 +1607,7 @@
     "japanese": "この書類は明日までに提出しなければなりません。",
     "english": "This document must be submitted by tomorrow.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～までに」は「by」を使います。「提出する」は「submit」です。文は受動態になっています。",
     "tags": [
       "受動態",
@@ -1621,7 +1621,7 @@
     "japanese": "彼が正直であるかどうかは、私にはまだ分からない。",
     "english": "Whether he is honest or not is still unclear to me.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～かどうか」は「whether or not」を使います。この文では主語の位置にあります。",
     "tags": [
       "名詞節",
@@ -1634,7 +1634,7 @@
     "japanese": "どの道を行くべきか分からなかったので、地図を確認した。",
     "english": "Not knowing which way to go, I checked the map.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "理由を表す分詞構文です。「どの道」は「which way」、「～すべきか」は「to do」を使います。",
     "tags": [
       "分詞構文",
@@ -1647,7 +1647,7 @@
     "japanese": "彼女は以前よりも英語が上達している。",
     "english": "Her English has improved more than before.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "現在完了形（継続・結果）を使った表現です。「上達する」は「improve」が適切です。",
     "tags": [
       "現在完了形",
@@ -1660,7 +1660,7 @@
     "japanese": "その会社は来年、新しい製品を発売する予定だ。",
     "english": "The company is planning to launch a new product next year.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～する予定だ」は「be planning to do」や「intend to do」を使います。「発売する」は「launch」が一般的です。",
     "tags": [
       "予定",
@@ -1673,7 +1673,7 @@
     "japanese": "交通渋滞のため、私たちは出発を遅らせざるを得なかった。",
     "english": "We were forced to postpone our departure due to the heavy traffic.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～せざるを得ない」は「be forced to do」を使います。理由を表すには「due to」が便利です。",
     "tags": [
       "受動態",
@@ -1687,7 +1687,7 @@
     "japanese": "彼はテレビゲームに夢中になりすぎて、宿題を忘れてしまった。",
     "english": "He was so absorbed in video games that he forgot his homework.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「so... that...」構文で結果を表します。「～に夢中になる」は「be absorbed in」です。",
     "tags": [
       "so...that構文",
@@ -1700,7 +1700,7 @@
     "japanese": "その計画は細部にわたって検討される必要がある。",
     "english": "The plan needs to be examined in detail.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「～される必要がある」は「need to be done」または「need doing」の形で表現できます。",
     "tags": [
       "受動態",
@@ -1713,7 +1713,7 @@
     "japanese": "私たちは夜遅くまで起きて、その映画を見た。",
     "english": "We stayed up late to watch the movie.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "「夜遅くまで起きている」は「stay up late」と表現します。「～するために」は目的の不定詞です。",
     "tags": [
       "句動詞",
@@ -1727,7 +1727,7 @@
     "japanese": "彼がその秘密を知っていたとは信じられない。",
     "english": "I can't believe that he knew the secret.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "接続詞「that」で始まる名詞節が使われています。「信じられない」は「can't believe」で表現します。",
     "tags": [
       "名詞節",
@@ -1740,7 +1740,7 @@
     "japanese": "もっと早く予約していれば、良い席が取れたのに。",
     "english": "We could have gotten better seats if we had booked earlier.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "過去の事実に反する仮定（可能性）を表します。「could have + 過去分詞」と仮定法過去完了を使います。",
     "tags": [
       "仮定法過去完了",
@@ -1754,7 +1754,7 @@
     "japanese": "彼女はどんな状況でも冷静でいられる人だ。",
     "english": "She is the kind of person who can remain calm in any situation.",
     "category": "other",
-    "difficulty": 3,
+    "difficulty": 1,
     "notes": "関係代名詞「who」を使って人を説明しています。「どんな状況でも」は「in any situation」です。",
     "tags": [
       "関係代名詞",
@@ -1767,7 +1767,7 @@
     "japanese": "彼女がとても魅力的でこちらが気後れしてしまう。",
     "english": "She is so attractive that I feel intimidated.",
     "category": "other",
-    "difficulty": 2,
+    "difficulty": 1,
     "notes": "「～なので～だ」という結果を表す構文 (so...that...) を使っています。intimidated は「威圧される、気後れする」という意味の形容詞です。",
     "createdAt": "2026-06-22T01:16:00.336Z"
   }

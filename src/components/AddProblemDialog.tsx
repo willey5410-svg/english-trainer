@@ -32,7 +32,7 @@ export const AddProblemDialog = ({
   const [japanese, setJapanese] = useState("");
   const [english, setEnglish] = useState("");
   const [category, setCategory] = useState<Category>(defaultCategory);
-  const [difficulty, setDifficulty] = useState<Difficulty>(2);
+  const [difficulty, setDifficulty] = useState<Difficulty>(1);
   const [grammar, setGrammar] = useState("");
   const [notes, setNotes] = useState("");
   // ローカル開発時は既定で共有プール（ファイル）に保存。公開環境ではブラウザ保存のみ。
@@ -211,7 +211,7 @@ export const AddProblemDialog = ({
                 }
                 disabled={loading}
               >
-                {([1, 2, 3, 4, 5] as Difficulty[]).map((d) => (
+                {([1, 2, 3] as Difficulty[]).map((d) => (
                   <option key={d} value={d}>
                     {DIFFICULTY_LABELS[d]}
                   </option>

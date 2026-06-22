@@ -54,7 +54,7 @@ export const FilterBar = ({ settings, onChange, availableCount }: Props) => {
           }
         >
           <option value="all">すべて</option>
-          {([1, 2, 3, 4, 5] as Difficulty[]).map((d) => (
+          {([1, 2, 3] as Difficulty[]).map((d) => (
             <option key={d} value={d}>
               {DIFFICULTY_LABELS[d]}
             </option>

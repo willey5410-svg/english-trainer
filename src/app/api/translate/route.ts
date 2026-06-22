@@ -4,7 +4,7 @@ import { checkAiAccess } from "@/lib/access";
 import { Difficulty } from "@/lib/types";
 
 const isDifficulty = (v: unknown): v is Difficulty =>
-  typeof v === "number" && [1, 2, 3, 4, 5].includes(v);
+  typeof v === "number" && [1, 2, 3].includes(v);
 
 export async function POST(request: Request) {
   // AI 翻訳は Gemini API を消費する。ローカル、または APP_ACCESS_CODE が

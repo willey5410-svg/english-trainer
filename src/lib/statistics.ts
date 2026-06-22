@@ -97,7 +97,7 @@ export const computeByDifficulty = (
   problems: Problem[],
   stats: Record<string, ProblemStats>,
 ): GroupedStats<Difficulty>[] => {
-  const difficulties: Difficulty[] = [1, 2, 3, 4, 5];
+  const difficulties: Difficulty[] = [1, 2, 3];
   return difficulties.map((d) => {
     const inDifficulty = problems.filter((p) => p.difficulty === d);
     let correct = 0;

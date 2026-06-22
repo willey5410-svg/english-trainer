@@ -7,7 +7,7 @@ const isCategory = (v: unknown): v is Category =>
   typeof v === "string" && v in CATEGORY_LABELS;
 
 const isDifficulty = (v: unknown): v is Difficulty =>
-  typeof v === "number" && [1, 2, 3, 4, 5].includes(v);
+  typeof v === "number" && [1, 2, 3].includes(v);
 
 export async function POST(request: Request) {
   // 問題生成は Gemini API を消費するため、デプロイ環境（Vercel）では無効化する。
