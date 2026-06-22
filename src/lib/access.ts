@@ -49,24 +49,15 @@ export const clearAccessCode = (): void => {
   window.localStorage.removeItem(ACCESS_KEY);
 };
 
-// AI 系 API への POST。アクセスコードをヘッダに付け、401 のときは
-// コード入力を促して一度だけ再試行する。
-export const aiPost = async (url: string, body: unknown): Promise<Response> => {
-  const send = (code: string) =>
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-access-code": code },
-      body: JSON.stringify(body),
-    });
-
-  let res = await send(getAccessCode());
-  if (res.status === 401 && typeof window !== "undefined") {
-    const entered = window.prompt("AI機能のアクセスコードを入力してください");
-    if (!entered) return res;
-    const trimmed = entered.trim();
-    setAccessCode(trimmed);
-    res = await send(trimmed);
-    if (res.status === 401) clearAccessCode();
-  }
-  return res;
-};
+// AI 系 API への POST。保存済みのアクセスコードをヘッダに付与して送信する。
+// 401（コード未設定・不一致）が返った場合は呼び出し側で入力フォームを表示する。
+// （window.prompt はモバイルで利用できないことがあるため使わない）
+export const aiPost = async (url: string, body: unknown): Promise<Response> =>
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-code": getAccessCode(),
+    },
+    body: JSON.stringify(body),
+  });

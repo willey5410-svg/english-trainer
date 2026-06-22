@@ -5,6 +5,7 @@ import { computeDiff, isExactMatch } from "@/lib/diff";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, Problem } from "@/lib/types";
 import { aiPost } from "@/lib/access";
 import { DiffView } from "./DiffView";
+import { AccessCodeForm } from "./AccessCodeForm";
 
 type GradeVerdict = "correct" | "close" | "incorrect";
 
@@ -59,6 +60,7 @@ export const TrainingCard = ({
   const [grading, setGrading] = useState(false);
   const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
   const [gradeError, setGradeError] = useState<string | null>(null);
+  const [needsCode, setNeedsCode] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -68,6 +70,7 @@ export const TrainingCard = ({
     setGrading(false);
     setGradeResult(null);
     setGradeError(null);
+    setNeedsCode(false);
     textareaRef.current?.focus();
   }, [problem.id]);
 
@@ -81,10 +84,17 @@ export const TrainingCard = ({
         reference: problem.english,
         userAnswer: userInput,
       });
+      if (res.status === 401) {
+        // アクセスコード未設定・不一致 → 画面内の入力フォームを表示
+        setNeedsCode(true);
+        setGradeError("AI機能のアクセスコードが必要です");
+        return;
+      }
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error ?? "採点に失敗しました");
       }
+      setNeedsCode(false);
       setGradeResult(data as GradeResult);
       setRevealed(true);
     } catch (err) {
@@ -151,6 +161,17 @@ export const TrainingCard = ({
       {gradeError && (
         <div className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
           {gradeError}
+        </div>
+      )}
+
+      {needsCode && (
+        <div className="mt-3">
+          <AccessCodeForm
+            onSubmit={() => {
+              setNeedsCode(false);
+              handleAIGrade();
+            }}
+          />
         </div>
       )}
 

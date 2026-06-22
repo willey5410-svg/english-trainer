@@ -10,6 +10,7 @@ import {
 } from "@/lib/types";
 import { addCustomProblem } from "@/lib/storage";
 import { aiPost } from "@/lib/access";
+import { AccessCodeForm } from "./AccessCodeForm";
 
 type Props = {
   open: boolean;
@@ -38,6 +39,7 @@ export const AddProblemDialog = ({
   const [saveToPool, setSaveToPool] = useState(allowPool);
   const [loading, setLoading] = useState(false);
   const [translating, setTranslating] = useState(false);
+  const [needsCode, setNeedsCode] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!open) return null;
@@ -60,8 +62,15 @@ export const AddProblemDialog = ({
     setError(null);
     try {
       const res = await aiPost("/api/translate", { japanese: jp, difficulty });
+      if (res.status === 401) {
+        // アクセスコード未設定・不一致 → 画面内の入力フォームを表示
+        setNeedsCode(true);
+        setError("AI機能のアクセスコードが必要です");
+        return;
+      }
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "英訳に失敗しました");
+      setNeedsCode(false);
       // 英訳は欄に反映（自動入力後も手で修正できる）。notes は空のときだけ補完する。
       setEnglish(data.english ?? "");
       if (data.notes && !notes.trim()) setNotes(data.notes);
@@ -264,6 +273,15 @@ export const AddProblemDialog = ({
             <div className="rounded bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}
             </div>
+          )}
+
+          {needsCode && (
+            <AccessCodeForm
+              onSubmit={() => {
+                setNeedsCode(false);
+                handleTranslate();
+              }}
+            />
           )}
 
           <div className="flex justify-end gap-2 pt-2">
