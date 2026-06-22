@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CATEGORY_LABELS,
   Category,
@@ -47,6 +47,8 @@ export const ProblemListView = ({
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [busyIds, setBusyIds] = useState<Set<string>>(new Set());
   const [addOpen, setAddOpen] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setStats(loadStats());
@@ -56,6 +58,88 @@ export const ProblemListView = ({
       return [...prev, ...loadCustomProblems().filter((p) => !ids.has(p.id))];
     });
   }, []);
+
+  // ブラウザ保存（localStorage）の自作問題を JSON ファイルとして書き出す。
+  // 公開版で追加した文章を PC 版に取り込むための受け渡し用。
+  const handleExport = () => {
+    const customProblems = loadCustomProblems();
+    if (customProblems.length === 0) {
+      window.alert("このブラウザに保存された自作文章はありません。");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(customProblems, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `custom-problems-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // エクスポートした JSON を共有プール（data/problems.json）へ取り込む。
+  // ローカル開発時（allowPool）のみ使用可能。
+  const handleImportFile = async (file: File) => {
+    setImporting(true);
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      const items: Problem[] = Array.isArray(parsed) ? parsed : [];
+      if (items.length === 0) {
+        window.alert("有効な問題データが見つかりませんでした。");
+        return;
+      }
+
+      let added = 0;
+      let skipped = 0;
+      let failed = 0;
+      const addedProblems: Problem[] = [];
+
+      for (const item of items) {
+        if (!item.japanese || !item.english) {
+          failed += 1;
+          continue;
+        }
+        try {
+          const res = await fetch("/api/problems", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              japanese: item.japanese,
+              english: item.english,
+              category: item.category ?? "other",
+              difficulty: item.difficulty ?? 2,
+              grammar: item.grammar,
+              notes: item.notes,
+            }),
+          });
+          if (res.status === 409) {
+            skipped += 1;
+            continue;
+          }
+          const data = await res.json();
+          if (!res.ok) {
+            failed += 1;
+            continue;
+          }
+          added += 1;
+          addedProblems.push(data.problem as Problem);
+        } catch {
+          failed += 1;
+        }
+      }
+
+      setProblems((prev) => [...prev, ...addedProblems]);
+      window.alert(
+        `取り込み完了: 追加 ${added} 件 / 重複スキップ ${skipped} 件 / 失敗 ${failed} 件`,
+      );
+    } catch {
+      window.alert("JSONファイルの読み込みに失敗しました。");
+    } finally {
+      setImporting(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -176,7 +260,37 @@ export const ProblemListView = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end">
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        <button
+          type="button"
+          onClick={handleExport}
+          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-brand-text shadow-sm hover:bg-slate-50"
+        >
+          ブラウザ保存分をエクスポート
+        </button>
+        {allowPool && (
+          <>
+            <input
+              ref={importInputRef}
+              type="file"
+              accept="application/json"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleImportFile(file);
+                e.target.value = "";
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => importInputRef.current?.click()}
+              disabled={importing}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-brand-text shadow-sm hover:bg-slate-50 disabled:opacity-50"
+            >
+              {importing ? "取り込み中…" : "JSONを取り込み"}
+            </button>
+          </>
+        )}
         <button
           type="button"
           onClick={() => setAddOpen(true)}
