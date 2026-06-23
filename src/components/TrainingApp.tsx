@@ -11,11 +11,19 @@ import {
   saveSettings,
 } from "@/lib/storage";
 import { pickByPriority } from "@/lib/scheduling";
+import {
+  DailyState,
+  currentStreak,
+  getOrCreateToday,
+  isCompleteToday,
+  loadDaily,
+} from "@/lib/daily";
 import { FilterBar } from "./FilterBar";
 import { StatsBar } from "./StatsBar";
 import { TrainingCard } from "./TrainingCard";
 import { GenerateDialog } from "./GenerateDialog";
 import { AddProblemDialog } from "./AddProblemDialog";
+import { DailyChallenge } from "./DailyChallenge";
 
 type Props = {
   initialProblems: Problem[];
@@ -59,6 +67,8 @@ export const TrainingApp = ({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [daily, setDaily] = useState<DailyState | null>(null);
+  const [dailyMode, setDailyMode] = useState(false);
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -116,6 +126,13 @@ export const TrainingApp = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, filteredProblems, settings.weakProblemMode]);
+
+  // 当日の課題セットを用意する（日付が変わったら自動で再生成。1日1回・冪等）。
+  useEffect(() => {
+    if (!hydrated || problems.length === 0) return;
+    setDaily(getOrCreateToday(problems, stats));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, problems.length]);
 
   const handleSettingsChange = (next: AppSettings) => {
     setSettings(next);
@@ -175,6 +192,23 @@ export const TrainingApp = ({
     return <div className="text-center text-brand-muted">読み込み中…</div>;
   }
 
+  if (dailyMode && daily) {
+    return (
+      <DailyChallenge
+        daily={daily}
+        problems={problems}
+        allowGrade={allowGrade}
+        strictMode={settings.strictMode}
+        onAnswered={handleAnswered}
+        onDailyUpdate={setDaily}
+        onExit={() => {
+          setDaily(loadDaily());
+          setDailyMode(false);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-end gap-2">
@@ -195,6 +229,16 @@ export const TrainingApp = ({
           </button>
         )}
       </div>
+
+      {daily && daily.problemIds.length > 0 && (
+        <DailyBanner
+          done={daily.completedIds.length}
+          total={daily.problemIds.length}
+          complete={isCompleteToday(daily)}
+          streak={currentStreak(daily)}
+          onStart={() => setDailyMode(true)}
+        />
+      )}
 
       <FilterBar
         settings={settings}
@@ -251,6 +295,56 @@ export const TrainingApp = ({
           {toast}
         </div>
       )}
+    </div>
+  );
+};
+
+type DailyBannerProps = {
+  done: number;
+  total: number;
+  complete: boolean;
+  streak: number;
+  onStart: () => void;
+};
+
+const DailyBanner = ({
+  done,
+  total,
+  complete,
+  streak,
+  onStart,
+}: DailyBannerProps) => {
+  const label = complete ? "結果を見る" : done > 0 ? "続ける" : "始める";
+  return (
+    <div className="rounded-xl bg-gradient-to-r from-blue-50 to-amber-50 p-4 shadow-sm ring-1 ring-slate-200">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 text-sm font-bold text-brand-text">
+            {complete ? "✅ 今日の課題 完了！" : "📅 今日の課題"}
+            {streak > 0 && (
+              <span className="text-xs font-medium text-amber-700">
+                🔥 連続 {streak} 日
+              </span>
+            )}
+          </div>
+          <div className="mt-1 text-xs text-brand-muted">
+            {complete ? `正解 ${done} / ${total}` : `進捗 ${done} / ${total} 問`}
+          </div>
+          <div className="mt-2 h-1.5 w-40 overflow-hidden rounded-full bg-white/70">
+            <div
+              className="h-full bg-brand-primary transition-all"
+              style={{ width: `${total > 0 ? (done / total) * 100 : 0}%` }}
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onStart}
+          className="shrink-0 rounded-lg bg-brand-primary px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700"
+        >
+          {label}
+        </button>
+      </div>
     </div>
   );
 };

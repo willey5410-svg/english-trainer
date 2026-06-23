@@ -44,6 +44,7 @@ type Props = {
   onAnswered: (isCorrect: boolean) => void;
   onNext: () => void;
   onSkip: () => void;
+  hideSkip?: boolean;
 };
 
 export const TrainingCard = ({
@@ -53,6 +54,7 @@ export const TrainingCard = ({
   onAnswered,
   onNext,
   onSkip,
+  hideSkip = false,
 }: Props) => {
   const [userInput, setUserInput] = useState("");
   const [revealed, setRevealed] = useState(false);
@@ -196,13 +198,15 @@ export const TrainingCard = ({
               解答を見る
             </button>
           </div>
-          <button
-            type="button"
-            onClick={onSkip}
-            className="text-xs text-brand-muted hover:text-brand-text hover:underline"
-          >
-            スキップ →
-          </button>
+          {!hideSkip && (
+            <button
+              type="button"
+              onClick={onSkip}
+              className="text-xs text-brand-muted hover:text-brand-text hover:underline"
+            >
+              スキップ →
+            </button>
+          )}
         </div>
       ) : (
         <div className="mt-6 space-y-5">
@@ -266,13 +270,15 @@ export const TrainingCard = ({
                   ✓ できた
                 </button>
               </div>
-              <button
-                type="button"
-                onClick={onSkip}
-                className="text-xs text-brand-muted hover:text-brand-text hover:underline"
-              >
-                スキップ（採点せず次へ）→
-              </button>
+              {!hideSkip && (
+                <button
+                  type="button"
+                  onClick={onSkip}
+                  className="text-xs text-brand-muted hover:text-brand-text hover:underline"
+                >
+                  スキップ（採点せず次へ）→
+                </button>
+              )}
             </div>
           ) : (
             <div className="flex justify-center">
