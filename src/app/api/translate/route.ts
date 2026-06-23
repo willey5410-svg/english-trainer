@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { translateToEnglish } from "@/lib/gemini";
+import {
+  GeminiRateLimitError,
+  GeminiUnavailableError,
+  translateToEnglish,
+} from "@/lib/gemini";
 import { checkAiAccess } from "@/lib/access";
 import { Difficulty } from "@/lib/types";
 
@@ -33,6 +37,12 @@ export async function POST(request: Request) {
     const result = await translateToEnglish({ japanese, difficulty });
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof GeminiRateLimitError) {
+      return NextResponse.json({ error: err.message }, { status: 429 });
+    }
+    if (err instanceof GeminiUnavailableError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
     const message = err instanceof Error ? err.message : "不明なエラー";
     return NextResponse.json(
       { error: `英訳に失敗しました: ${message}` },

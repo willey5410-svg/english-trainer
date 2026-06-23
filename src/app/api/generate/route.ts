@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { generateProblems, GenerateParams } from "@/lib/gemini";
+import {
+  GeminiRateLimitError,
+  GeminiUnavailableError,
+  generateProblems,
+  GenerateParams,
+} from "@/lib/gemini";
 import { appendProblems, loadProblems } from "@/lib/problems";
 import { CATEGORY_LABELS, Category, Difficulty } from "@/lib/types";
 
@@ -70,6 +75,12 @@ export async function POST(request: Request) {
       requested: count,
     });
   } catch (err) {
+    if (err instanceof GeminiRateLimitError) {
+      return NextResponse.json({ error: err.message }, { status: 429 });
+    }
+    if (err instanceof GeminiUnavailableError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
     const message = err instanceof Error ? err.message : "不明なエラー";
     return NextResponse.json(
       { error: `問題生成に失敗しました: ${message}` },

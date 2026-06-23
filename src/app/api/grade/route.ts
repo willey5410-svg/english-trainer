@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { GeminiRateLimitError, gradeAnswer } from "@/lib/gemini";
+import {
+  GeminiRateLimitError,
+  GeminiUnavailableError,
+  gradeAnswer,
+} from "@/lib/gemini";
 import { checkAiAccess } from "@/lib/access";
 
 export async function POST(request: Request) {
@@ -38,6 +42,9 @@ export async function POST(request: Request) {
   } catch (err) {
     if (err instanceof GeminiRateLimitError) {
       return NextResponse.json({ error: err.message }, { status: 429 });
+    }
+    if (err instanceof GeminiUnavailableError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
     }
     const message = err instanceof Error ? err.message : "不明なエラー";
     return NextResponse.json(
