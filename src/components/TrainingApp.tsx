@@ -29,6 +29,7 @@ type Props = {
   initialProblems: Problem[];
   allowGenerate: boolean;
   allowGrade: boolean;
+  startInDaily?: boolean;
 };
 
 const computeExcludeSize = (poolSize: number): number => {
@@ -53,6 +54,7 @@ export const TrainingApp = ({
   initialProblems,
   allowGenerate,
   allowGrade,
+  startInDaily = false,
 }: Props) => {
   const [fileProblems, setFileProblems] = useState<Problem[]>(initialProblems);
   const [customProblems, setCustomProblems] = useState<Problem[]>([]);
@@ -69,6 +71,7 @@ export const TrainingApp = ({
   const [toast, setToast] = useState<string | null>(null);
   const [daily, setDaily] = useState<DailyState | null>(null);
   const [dailyMode, setDailyMode] = useState(false);
+  const [dailyAutoStarted, setDailyAutoStarted] = useState(false);
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -133,6 +136,15 @@ export const TrainingApp = ({
     setDaily(getOrCreateToday(problems, stats));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, problems.length]);
+
+  // ホームから ?daily=1 で来たときは、課題セットが整い次第すぐ課題モードに入る（初回のみ）。
+  useEffect(() => {
+    if (!startInDaily || dailyAutoStarted) return;
+    if (daily && daily.problemIds.length > 0) {
+      setDailyMode(true);
+      setDailyAutoStarted(true);
+    }
+  }, [startInDaily, dailyAutoStarted, daily]);
 
   const handleSettingsChange = (next: AppSettings) => {
     setSettings(next);

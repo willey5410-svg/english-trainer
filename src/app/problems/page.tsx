@@ -18,6 +18,9 @@ export default async function ProblemsPage() {
         <h1 className="text-xl font-bold text-brand-text">問題プール</h1>
         <nav className="flex items-center gap-4 text-sm">
           <Link href="/" className="text-brand-primary hover:underline">
+            ホーム
+          </Link>
+          <Link href="/train" className="text-brand-primary hover:underline">
             トレーニング
           </Link>
           <Link href="/stats" className="text-brand-primary hover:underline">
