@@ -2,13 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* brand カラーは RGB チャンネルで定義（tailwind.config.ts が rgb(var(...) / alpha) で参照）。 */
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
+  --brand-primary: 37 99 235; /* #2563eb */
+  --brand-accent: 245 158 11; /* #f59e0b */
+  --brand-bg: 248 250 252; /* #f8fafc */
+  --brand-surface: 255 255 255; /* #ffffff */
+  --brand-text: 30 41 59; /* #1e293b */
+  --brand-muted: 100 116 139; /* #64748b */
+}
+
+.dark {
+  --brand-primary: 96 165 250; /* blue-400（暗背景で映える明度に） */
+  --brand-accent: 251 191 36; /* amber-400 */
+  --brand-bg: 15 23 42; /* slate-900 */
+  --brand-surface: 30 41 59; /* slate-800 */
+  --brand-text: 226 232 240; /* slate-200 */
+  --brand-muted: 148 163 184; /* slate-400 */
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: rgb(var(--brand-text));
+  background: rgb(var(--brand-bg));
   min-height: 100dvh;
+}
+
+/* ダークモードでの中立色ユーティリティの一括調整。
+   各コンポーネントの bg-white / slate 系を個別に書き換えず、ここでまとめて上書きする
+   （.dark .xxx は通常ユーティリティより詳細度が高いため確実に効く）。
+   色付きチップ（bg-blue-50 等）や色付きボタン上の text-white は対象外。 */
+.dark .bg-white {
+  background-color: rgb(30 41 59); /* slate-800 */
+}
+.dark .bg-slate-50 {
+  background-color: rgb(51 65 85); /* slate-700 */
+}
+.dark .bg-slate-100 {
+  background-color: rgb(51 65 85); /* slate-700 */
+}
+.dark .bg-slate-200 {
+  background-color: rgb(71 85 105); /* slate-600（プログレスバーの溝など） */
+}
+.dark .border-slate-300 {
+  border-color: rgb(71 85 105); /* slate-600 */
+}
+.dark .ring-slate-200 {
+  --tw-ring-color: rgb(51 65 85); /* slate-700 */
+}
+.dark .text-slate-700 {
+  color: rgb(203 213 225); /* slate-300 */
+}
+.dark .text-slate-600 {
+  color: rgb(148 163 184); /* slate-400 */
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(51 65 85); /* slate-700 */
 }

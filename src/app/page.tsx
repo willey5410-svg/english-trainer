@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { loadProblems } from "@/lib/problems";
 import { TrainingApp } from "@/components/TrainingApp";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -18,13 +19,14 @@ export default async function Page() {
         <h1 className="text-xl font-bold text-brand-text">
           瞬間英作文トレーナー
         </h1>
-        <nav className="flex gap-4 text-sm">
+        <nav className="flex items-center gap-4 text-sm">
           <Link href="/problems" className="text-brand-primary hover:underline">
             問題プール
           </Link>
           <Link href="/stats" className="text-brand-primary hover:underline">
             学習統計
           </Link>
+          <ThemeToggle />
         </nav>
       </header>
       <TrainingApp

@@ -32,11 +32,25 @@ export class GeminiRateLimitError extends Error {
   }
 }
 
-const isRateLimitError = (err: unknown): boolean =>
-  err instanceof Error &&
-  ("status" in err && (err as { status?: number }).status === 429);
+export class GeminiUnavailableError extends Error {
+  constructor() {
+    super(
+      "Geminiが一時的に混雑しています（503）。少し待ってから再度お試しください。",
+    );
+    this.name = "GeminiUnavailableError";
+  }
+}
 
-// 無料枠の分単位レート制限に短時間で達した場合、待って自動的に再試行する。
+const getErrorStatus = (err: unknown): number | undefined =>
+  err instanceof Error && "status" in err
+    ? (err as { status?: number }).status
+    : undefined;
+
+// 429（レート制限）と 503（高負荷で一時的に利用不可）は、少し待てば回復することが多い。
+const isRetryableStatus = (status: number | undefined): boolean =>
+  status === 429 || status === 503;
+
+// 一時的なエラー（レート制限・高負荷）の場合、待って自動的に再試行する。
 const withRetry = async <T>(
   fn: () => Promise<T>,
   retries = 2,
@@ -45,12 +59,16 @@ const withRetry = async <T>(
   try {
     return await fn();
   } catch (err) {
-    if (isRateLimitError(err) && retries > 0) {
+    const status = getErrorStatus(err);
+    if (isRetryableStatus(status) && retries > 0) {
       await new Promise((resolve) => setTimeout(resolve, delayMs));
       return withRetry(fn, retries - 1, delayMs * 2);
     }
-    if (isRateLimitError(err)) {
+    if (status === 429) {
       throw new GeminiRateLimitError();
+    }
+    if (status === 503) {
+      throw new GeminiUnavailableError();
     }
     throw err;
   }
@@ -146,7 +164,7 @@ export const generateProblems = async (
   });
 
   const prompt = buildPrompt(params);
-  const result = await model.generateContent(prompt);
+  const result = await withRetry(() => model.generateContent(prompt));
   const text = result.response.text();
 
   let parsed: { items: GeneratedItem[] };
@@ -330,7 +348,9 @@ export const translateToEnglish = async (
     },
   });
 
-  const result = await model.generateContent(buildTranslatePrompt(params));
+  const result = await withRetry(() =>
+    model.generateContent(buildTranslatePrompt(params)),
+  );
   const text = result.response.text();
 
   let parsed: TranslateResult;

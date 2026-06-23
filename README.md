@@ -17,6 +17,7 @@
 - **文章の手動追加**（共有プール or このブラウザのみ）と、**AI 英訳**による英文の自動補完
 - **問題プール管理画面**（一覧・カテゴリ別削除・全削除、自作文章のインポート / エクスポート）
 - **学習統計画面**（全体・カテゴリ別・難易度別正答率、苦手問題トップ10、復習推奨リスト、最近の回答履歴）
+- **ダークモード**: 各画面右上のトグルでライト / ダークを切り替え。設定は localStorage に保存し、未設定時は OS のテーマ設定に追従
 - **アクセスコード保護**: 公開環境では合言葉（`APP_ACCESS_CODE`）を入力した人だけ AI 機能（採点・英訳）を利用可能
 
 ## 優先度スコアの仕組み（苦手 / 復習優先モード）
@@ -101,6 +102,7 @@ english-trainer/
 │   │   ├── GenerateDialog.tsx   # 問題生成ダイアログ
 │   │   ├── AddProblemDialog.tsx # 文章の手動追加（AI 英訳つき）
 │   │   ├── AccessCodeForm.tsx   # AI 機能のアクセスコード入力
+│   │   ├── ThemeToggle.tsx      # ライト/ダーク切り替えボタン
 │   │   ├── ProblemListView.tsx  # 問題プール一覧・削除・インポート/エクスポート
 │   │   ├── DailyChallenge.tsx   # 今日の課題（毎日15問）モード
 │   │   └── StatsView.tsx        # 学習統計画面の本体
@@ -109,6 +111,7 @@ english-trainer/
 │       ├── diff.ts              # 単語単位 diff (LCS)
 │       ├── storage.ts           # localStorage 操作（進捗 / 設定 / 自作問題）
 │       ├── access.ts            # AI 機能のアクセス制御（アクセスコード）
+│       ├── theme.ts             # ダークモードの状態管理（localStorage / OS追従）
 │       ├── problems.ts          # 問題 JSON の読み書き
 │       ├── gemini.ts            # Gemini API クライアント（生成 / 採点 / 翻訳）
 │       ├── statistics.ts        # 統計集計ロジック
