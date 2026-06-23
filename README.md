@@ -3,16 +3,20 @@
 日本語文を見て瞬時に英訳するトレーニングを反復するための Web アプリです。
 問題は Gemini API で自動生成し、タイピング照合と差分ハイライトで学習効果を高めます。
 
-## できること（Phase 5 まで完了 = MVP完成）
+## できること
 
 - ランダムに日本語文を出題
 - 英訳をタイピング入力 → 「解答を見る」で正解英文を表示
 - ユーザー入力と正解の **単語単位の差分ハイライト**（誤り・欠落を色分け）
+- **AI 採点**（Gemini）: 模範解答と表現が違っても意味が伝われば正解と判定。点数・講評・改善例を表示
 - 「できた / できなかった」で自己採点 → 進捗を localStorage に保存
-- カテゴリ・難易度フィルタ
+- カテゴリ・難易度（3段階: 中級 / 上級 / 最上級）フィルタ
 - **苦手 / 復習優先モード**: 不正解率・経過時間・未回答ボーナスを統合した SRS 的な複合スコアで重み付き抽選
-- **Gemini API での問題自動生成**（カテゴリ・難易度・文型・件数を指定して一括生成）
+- **Gemini API での問題自動生成**（カテゴリ・難易度・文型・件数を指定して一括生成。ローカル開発時のみ）
+- **文章の手動追加**（共有プール or このブラウザのみ）と、**AI 英訳**による英文の自動補完
+- **問題プール管理画面**（一覧・カテゴリ別削除・全削除、自作文章のインポート / エクスポート）
 - **学習統計画面**（全体・カテゴリ別・難易度別正答率、苦手問題トップ10、復習推奨リスト、最近の回答履歴）
+- **アクセスコード保護**: 公開環境では合言葉（`APP_ACCESS_CODE`）を入力した人だけ AI 機能（採点・英訳）を利用可能
 
 ## 優先度スコアの仕組み（苦手 / 復習優先モード）
 
@@ -37,11 +41,11 @@ score = 0.3 + incorrectRate × 1.5 + overdueRatio × 0.5 + untriedBonus
 ### 2. 依存関係のインストール
 
 ```bash
-cd /Users/kigoshiichirou/Desktop/english-trainer
+cd english-trainer
 npm install
 ```
 
-### 3. Gemini API キーの設定（問題生成機能で必須）
+### 3. Gemini API キーの設定（問題生成・AI 採点・AI 英訳で必須）
 
 1. [Google AI Studio](https://aistudio.google.com/apikey) で API キーを取得
 2. `.env.example` をコピーして `.env.local` を作成
@@ -56,6 +60,11 @@ cp .env.example .env.local
 GEMINI_API_KEY=あなたのAPIキー
 ```
 
+任意で、使用モデルやアクセスコードも設定できます（`.env.example` 参照）。
+
+- `GEMINI_MODEL` / `GEMINI_GRADE_MODEL`: 生成・採点に使うモデル
+- `APP_ACCESS_CODE`: 設定すると公開環境でも合言葉を入力した人だけ AI 機能を使える（未設定だと公開環境では AI 機能は無効＝ローカル開発時のみ利用可）
+
 ### 4. 開発サーバーの起動
 
 ```bash
@@ -69,30 +78,37 @@ npm run dev
 ```
 english-trainer/
 ├── data/
-│   └── problems.json            # 問題プール（Gemini で生成 / 初期はモック10問）
+│   └── problems.json            # 共有問題プール（Gemini で生成 / 手動追加）
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx             # メイン画面（トレーニング）
 │   │   ├── stats/page.tsx       # 学習統計画面
+│   │   ├── problems/page.tsx    # 問題プール管理画面
 │   │   ├── layout.tsx
 │   │   ├── globals.css
 │   │   └── api/
-│   │       ├── generate/route.ts    # POST: Gemini で問題生成
-│   │       └── problems/route.ts    # GET / DELETE: 問題プール管理
+│   │       ├── generate/route.ts    # POST: Gemini で問題生成（ローカルのみ）
+│   │       ├── problems/route.ts    # GET / POST / DELETE: 問題プール管理
+│   │       ├── grade/route.ts       # POST: Gemini で AI 採点
+│   │       └── translate/route.ts   # POST: Gemini で日本語→英語 翻訳
 │   ├── components/
 │   │   ├── TrainingApp.tsx      # アプリ全体の状態管理
-│   │   ├── TrainingCard.tsx     # 問題カード（入力・解答表示）
+│   │   ├── TrainingCard.tsx     # 問題カード（入力・AI採点・解答表示）
 │   │   ├── DiffView.tsx         # 差分ハイライト
 │   │   ├── FilterBar.tsx        # カテゴリ・難易度フィルタ
 │   │   ├── StatsBar.tsx         # セッション統計
 │   │   ├── GenerateDialog.tsx   # 問題生成ダイアログ
+│   │   ├── AddProblemDialog.tsx # 文章の手動追加（AI 英訳つき）
+│   │   ├── AccessCodeForm.tsx   # AI 機能のアクセスコード入力
+│   │   ├── ProblemListView.tsx  # 問題プール一覧・削除・インポート/エクスポート
 │   │   └── StatsView.tsx        # 学習統計画面の本体
 │   └── lib/
 │       ├── types.ts             # 型定義
 │       ├── diff.ts              # 単語単位 diff (LCS)
-│       ├── storage.ts           # localStorage 操作
+│       ├── storage.ts           # localStorage 操作（進捗 / 設定 / 自作問題）
+│       ├── access.ts            # AI 機能のアクセス制御（アクセスコード）
 │       ├── problems.ts          # 問題 JSON の読み書き
-│       ├── gemini.ts            # Gemini API クライアント
+│       ├── gemini.ts            # Gemini API クライアント（生成 / 採点 / 翻訳）
 │       ├── statistics.ts        # 統計集計ロジック
 │       └── scheduling.ts        # SRS的な優先度スコア / 重み付き抽選
 ├── .env.example
@@ -104,8 +120,8 @@ english-trainer/
 
 - Next.js 15 (App Router)
 - TypeScript / Tailwind CSS
-- Google Gemini API（Phase 3 で利用）
-- localStorage（進捗保存）
+- Google Gemini API（問題生成 / AI 採点 / AI 英訳）
+- localStorage（進捗・設定・自作問題・アクセスコードの保存）
 
 ## 使い方
 
@@ -118,9 +134,18 @@ english-trainer/
 ### トレーニング
 1. 日本語文が表示されたら、頭の中で英訳を考える
 2. 英訳をテキストエリアに入力（しなくてもOK）
-3. 「解答を見る」（または Cmd/Ctrl + Enter）で正解を表示
+3. 「AIで採点」で点数・講評・改善例を表示、または「解答を見る」（Cmd/Ctrl + Enter）で正解を表示
 4. 差分を確認し、「できた / できなかった」で自己採点
 5. 「次の問題へ」で繰り返し
+
+### 文章の手動追加
+1. 「+ 文章を追加」ボタンを押す
+2. 日本語文を入力し、「AIで英訳」で英文を自動補完（手で修正も可）
+3. ローカル開発時は共有プール（`data/problems.json`）／このブラウザのどちらに保存するか選べる。公開環境ではこのブラウザ（localStorage）に保存される
+
+### 問題プール管理
+- 画面右上の「問題プール」リンクから管理画面へ
+- 問題の一覧・カテゴリ別削除・全削除、自作文章（このブラウザ保存分）のインポート / エクスポートができる
 
 ### 学習統計
 - 画面右上の「学習統計 →」リンクから統計画面へ
