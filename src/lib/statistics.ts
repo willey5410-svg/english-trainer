@@ -1,6 +1,7 @@
 import {
   CATEGORY_LABELS,
   Category,
+  DIFFICULTY_LABELS,
   Difficulty,
   Problem,
   ProblemStats,
@@ -115,7 +116,7 @@ export const computeByDifficulty = (
     const total = correct + incorrect;
     return {
       key: d,
-      label: "★".repeat(d) + "☆".repeat(5 - d),
+      label: DIFFICULTY_LABELS[d],
       problemCount: inDifficulty.length,
       answeredCount: answered,
       correct,
