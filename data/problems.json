@@ -1770,5 +1770,95 @@
     "difficulty": 1,
     "notes": "「～なので～だ」という結果を表す構文 (so...that...) を使っています。intimidated は「威圧される、気後れする」という意味の形容詞です。",
     "createdAt": "2026-06-22T01:16:00.336Z"
+  },
+  {
+    "id": "custom-1782330892537-62fiyi",
+    "japanese": "こちらのホテルは空港からのシャトルバスサービスがありますか？",
+    "english": "Does this hotel offer a shuttle bus service from the airport?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"offer\" は「提供する」という意味で、サービスについて尋ねるときによく使われます。",
+    "createdAt": "2026-06-24T19:54:52.537Z"
+  },
+  {
+    "id": "custom-1782330892598-88fnz1",
+    "japanese": "飛行機の座席を窓側に変更することは可能でしょうか？",
+    "english": "Would it be possible to change my seat to a window seat?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"Would it be possible to V?\" は丁寧な依頼の表現です。",
+    "createdAt": "2026-06-24T19:54:52.598Z"
+  },
+  {
+    "id": "custom-1782330892629-9o1874",
+    "japanese": "どこで現地通貨に両替できますか？一番良いレートの場所はどこですか？",
+    "english": "Where can I exchange currency? What's the best place to get a good rate?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"exchange currency\" は「両替する」という一般的な表現です。\"rate\" は「為替レート」を指します。",
+    "createdAt": "2026-06-24T19:54:52.630Z"
+  },
+  {
+    "id": "custom-1782330892657-7lwkfi",
+    "japanese": "この辺りでおすすめの地元の体験ができる場所はありますか？",
+    "english": "Are there any recommended local experiences or activities around here?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"local experiences\" はその土地ならではの体験を指す便利な表現です。",
+    "createdAt": "2026-06-24T19:54:52.657Z"
+  },
+  {
+    "id": "custom-1782330892688-33zldj",
+    "japanese": "ホテルに戻るには、どのバスに乗ればいいですか？",
+    "english": "Which bus should I take to get back to the hotel?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"Which bus\" で特定のバスを尋ね、\"to get back to\" で目的地への手段を表現します。",
+    "createdAt": "2026-06-24T19:54:52.688Z"
+  },
+  {
+    "id": "custom-1782330892718-bi6ahz",
+    "japanese": "予約は「山田」の名前でしています。",
+    "english": "I have a reservation under the name of Yamada.",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "「〜の名前で」は \"under the name of 〜\" または \"under the name 〜\" と表現します。",
+    "createdAt": "2026-06-24T19:54:52.718Z"
+  },
+  {
+    "id": "custom-1782330892748-u190t4",
+    "japanese": "チェックアウトは午前11時までですが、少し延長できますか？",
+    "english": "Check-out is at 11 AM, but could I possibly get a late check-out?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"late check-out\" はチェックアウト時間の延長を指す便利なフレーズです。\"could I possibly V\" は丁寧な依頼です。",
+    "createdAt": "2026-06-24T19:54:52.748Z"
+  },
+  {
+    "id": "custom-1782330892780-ig7d3b",
+    "japanese": "このアトラクションの入場券はオンラインで事前に購入できますか？",
+    "english": "Can I buy tickets for this attraction online in advance?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"in advance\" は「事前に」という意味で、予約や購入についてよく使われます。",
+    "createdAt": "2026-06-24T19:54:52.780Z"
+  },
+  {
+    "id": "custom-1782330892811-55oa3e",
+    "japanese": "明日の天気予報は晴れなので、ビーチに行く予定です。",
+    "english": "The weather forecast for tomorrow is sunny, so I'm planning to go to the beach.",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "\"weather forecast\" は「天気予報」です。\"be planning to V\" で「〜する予定である」を表現します。",
+    "createdAt": "2026-06-24T19:54:52.811Z"
+  },
+  {
+    "id": "custom-1782330892846-phbkw1",
+    "japanese": "この美術館は、何時まで開いていますか？",
+    "english": "What time does this museum close?",
+    "category": "travel",
+    "difficulty": 1,
+    "notes": "「何時まで開いているか」は、閉館時間を尋ねることで表現できます。\"What time does it close?\"",
+    "createdAt": "2026-06-24T19:54:52.846Z"
   }
 ]
