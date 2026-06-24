@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { loadProblems } from "@/lib/problems";
+import { isPoolWritable, loadProblems } from "@/lib/problems";
 import { TrainingApp } from "@/components/TrainingApp";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
-// 共有プール（data/problems.json）への保存はファイル書き込みが必要なため、ローカル開発時のみ。
-// 公開環境では生成結果をブラウザ（localStorage）に保存する。
-const allowPool = !process.env.VERCEL;
+// 共有プールへの保存は、ローカル開発時、または公開環境でGitHub連携が設定されている場合のみ可能。
+// それ以外の公開環境では生成結果をブラウザ（localStorage）に保存する。
+const allowPool = isPoolWritable();
 // AI 採点・英訳・問題生成は、ローカル または アクセスコード設定済み のとき利用可能。
 // （実際の許可判定はサーバー側の checkAiAccess でも行う）
 const allowAI = !process.env.VERCEL || !!process.env.APP_ACCESS_CODE;

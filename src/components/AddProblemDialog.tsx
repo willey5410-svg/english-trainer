@@ -93,18 +93,19 @@ export const AddProblemDialog = ({
     try {
       if (allowPool && saveToPool) {
         // 共有プール（data/problems.json）へ保存
-        const res = await fetch("/api/problems", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            japanese: jp,
-            english: en,
-            category,
-            difficulty,
-            grammar: grammar.trim() || undefined,
-            notes: notes.trim() || undefined,
-          }),
+        const res = await aiPost("/api/problems", {
+          japanese: jp,
+          english: en,
+          category,
+          difficulty,
+          grammar: grammar.trim() || undefined,
+          notes: notes.trim() || undefined,
         });
+        if (res.status === 401) {
+          setNeedsCode(true);
+          setError("AI機能のアクセスコードが必要です");
+          return;
+        }
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "追加に失敗しました");
         onAdded({ problem: data.problem as Problem, savedToPool: true });

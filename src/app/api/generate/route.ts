@@ -5,7 +5,7 @@ import {
   generateProblems,
   GenerateParams,
 } from "@/lib/gemini";
-import { appendProblems, loadProblems } from "@/lib/problems";
+import { appendProblems, isPoolWritable, loadProblems } from "@/lib/problems";
 import { CATEGORY_LABELS, Category, Difficulty } from "@/lib/types";
 import { checkAiAccess } from "@/lib/access";
 
@@ -74,10 +74,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // ローカル開発時は共有プール（data/problems.json）へ保存して再デプロイする運用。
-    // 公開環境（Vercel）はファイルに書き込めないため、生成結果を返してクライアント側で
-    // ブラウザ（localStorage）に保存させる。
-    if (!process.env.VERCEL) {
+    // ローカル開発時、または公開環境でGitHub連携が設定されている場合は
+    // 共有プール（data/problems.json）へ直接保存する。それ以外の公開環境では
+    // 生成結果を返してクライアント側でブラウザ（localStorage）に保存させる。
+    if (isPoolWritable()) {
       const merged = await appendProblems(newProblems);
       return NextResponse.json({
         generated: newProblems.length,
