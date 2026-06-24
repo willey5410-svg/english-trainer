@@ -6,12 +6,21 @@ import {
   Category,
   DIFFICULTY_LABELS,
   Difficulty,
+  Problem,
 } from "@/lib/types";
+import { aiPost } from "@/lib/access";
+import { AccessCodeForm } from "./AccessCodeForm";
 
 type Props = {
   open: boolean;
+  // 重複回避のため、既存の問題（共有プール＋ブラウザ保存）の日本語文一覧を渡す。
+  existingJapanese: string[];
   onClose: () => void;
-  onGenerated: (result: { generated: number; totalProblems: number }) => void;
+  onGenerated: (result: {
+    generated: number;
+    totalProblems?: number;
+    problems?: Problem[];
+  }) => void;
 };
 
 const GRAMMAR_PRESETS = [
@@ -33,12 +42,18 @@ const GRAMMAR_PRESETS = [
   "間接疑問文",
 ];
 
-export const GenerateDialog = ({ open, onClose, onGenerated }: Props) => {
+export const GenerateDialog = ({
+  open,
+  existingJapanese,
+  onClose,
+  onGenerated,
+}: Props) => {
   const [category, setCategory] = useState<Category>("daily");
   const [difficulty, setDifficulty] = useState<Difficulty>(1);
   const [grammar, setGrammar] = useState<string>("");
   const [count, setCount] = useState<number>(20);
   const [loading, setLoading] = useState(false);
+  const [needsCode, setNeedsCode] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!open) return null;
@@ -47,23 +62,29 @@ export const GenerateDialog = ({ open, onClose, onGenerated }: Props) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          difficulty,
-          grammar: grammar || undefined,
-          count,
-        }),
+      // Gemini を消費するため、アクセスコードを付与して送信する（採点・英訳と同じ）。
+      const res = await aiPost("/api/generate", {
+        category,
+        difficulty,
+        grammar: grammar || undefined,
+        count,
+        existingJapanese,
       });
+      if (res.status === 401) {
+        // アクセスコード未設定・不一致 → 画面内の入力フォームを表示
+        setNeedsCode(true);
+        setError("AI機能のアクセスコードが必要です");
+        return;
+      }
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error ?? "生成に失敗しました");
       }
+      setNeedsCode(false);
       onGenerated({
         generated: data.generated,
         totalProblems: data.totalProblems,
+        problems: data.problems as Problem[] | undefined,
       });
       onClose();
     } catch (err) {
@@ -161,6 +182,15 @@ export const GenerateDialog = ({ open, onClose, onGenerated }: Props) => {
             <div className="rounded bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}
             </div>
+          )}
+
+          {needsCode && (
+            <AccessCodeForm
+              onSubmit={() => {
+                setNeedsCode(false);
+                handleSubmit();
+              }}
+            />
           )}
 
           <div className="flex justify-end gap-2 pt-2">

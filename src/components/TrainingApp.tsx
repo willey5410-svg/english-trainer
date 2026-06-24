@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Problem, AppSettings, ProblemStats } from "@/lib/types";
 import {
   DEFAULT_SETTINGS,
+  addCustomProblems,
   loadCustomProblems,
   loadSettings,
   loadStats,
@@ -27,7 +28,10 @@ import { DailyChallenge } from "./DailyChallenge";
 
 type Props = {
   initialProblems: Problem[];
+  // 問題生成機能を使えるか（Gemini 利用可能か）。
   allowGenerate: boolean;
+  // 共有プール（ファイル）に保存できるか。false の場合はブラウザ（localStorage）保存。
+  allowPool: boolean;
   allowGrade: boolean;
   startInDaily?: boolean;
 };
@@ -53,6 +57,7 @@ const pickRandomExcluding = (
 export const TrainingApp = ({
   initialProblems,
   allowGenerate,
+  allowPool,
   allowGrade,
   startInDaily = false,
 }: Props) => {
@@ -181,10 +186,28 @@ export const TrainingApp = ({
 
   const handleGenerated = async (result: {
     generated: number;
-    totalProblems: number;
+    totalProblems?: number;
+    problems?: Problem[];
   }) => {
-    await reloadProblems();
-    showToast(`${result.generated} 問を生成しました（合計 ${result.totalProblems} 問）`);
+    if (allowPool) {
+      // ローカル: 共有プール（ファイル）に保存済み → 再読み込み
+      await reloadProblems();
+      showToast(
+        `${result.generated} 問を生成しました（合計 ${result.totalProblems} 問）`,
+      );
+      return;
+    }
+    // 公開環境: 生成結果をこのブラウザ（localStorage）に保存。id は "local-" 始まりにする。
+    const incoming = (result.problems ?? []).map((p, i) => ({
+      ...p,
+      id: `local-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`,
+    }));
+    const before = customProblems.length;
+    const merged = addCustomProblems(incoming);
+    setCustomProblems(merged);
+    showToast(
+      `${merged.length - before} 問を生成し、このブラウザに保存しました`,
+    );
   };
 
   const handleAdded = async (result: {
@@ -289,6 +312,7 @@ export const TrainingApp = ({
       {allowGenerate && (
         <GenerateDialog
           open={dialogOpen}
+          existingJapanese={problems.map((p) => p.japanese)}
           onClose={() => setDialogOpen(false)}
           onGenerated={handleGenerated}
         />
@@ -296,7 +320,7 @@ export const TrainingApp = ({
 
       <AddProblemDialog
         open={addOpen}
-        allowPool={allowGenerate}
+        allowPool={allowPool}
         allowTranslate={allowGrade}
         onClose={() => setAddOpen(false)}
         onAdded={handleAdded}

@@ -93,6 +93,18 @@ export const addCustomProblem = (problem: Problem): Problem[] => {
   return merged;
 };
 
+// 生成などで複数問題をまとめて追加する。日本語文が既存と重複するものは除外する。
+export const addCustomProblems = (incoming: Problem[]): Problem[] => {
+  const existing = loadCustomProblems();
+  const existingJapanese = new Set(existing.map((p) => p.japanese.trim()));
+  const deduped = incoming.filter(
+    (p) => !existingJapanese.has(p.japanese.trim()),
+  );
+  const merged = [...existing, ...deduped];
+  saveCustomProblems(merged);
+  return merged;
+};
+
 export const deleteCustomProblem = (id: string): Problem[] => {
   const remaining = loadCustomProblems().filter((p) => p.id !== id);
   saveCustomProblems(remaining);
