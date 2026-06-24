@@ -5,9 +5,11 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
-// 問題生成・共有プールへの保存はファイル書き込みが必要なため、ローカル開発時のみ許可する。
-const allowGenerate = !process.env.VERCEL;
-// AI 採点・英訳は、ローカル または アクセスコード設定済み のとき利用可能にする。
+// 共有プール（data/problems.json）への保存はファイル書き込みが必要なため、ローカル開発時のみ。
+// 公開環境では生成結果をブラウザ（localStorage）に保存する。
+const allowPool = !process.env.VERCEL;
+// AI 採点・英訳・問題生成は、ローカル または アクセスコード設定済み のとき利用可能。
+// （実際の許可判定はサーバー側の checkAiAccess でも行う）
 const allowAI = !process.env.VERCEL || !!process.env.APP_ACCESS_CODE;
 
 export default async function TrainPage({
@@ -38,7 +40,8 @@ export default async function TrainPage({
       </header>
       <TrainingApp
         initialProblems={problems}
-        allowGenerate={allowGenerate}
+        allowGenerate={allowAI}
+        allowPool={allowPool}
         allowGrade={allowAI}
         startInDaily={startInDaily}
       />
