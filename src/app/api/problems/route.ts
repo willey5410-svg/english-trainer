@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
-import { appendProblems, loadProblems, saveProblems } from "@/lib/problems";
+import {
+  appendProblems,
+  isPoolWritable,
+  loadProblems,
+  saveProblems,
+} from "@/lib/problems";
 import {
   Category,
   CATEGORY_LABELS,
   Difficulty,
   Problem,
 } from "@/lib/types";
+import { checkAiAccess } from "@/lib/access";
 
 const isCategory = (v: unknown): v is Category =>
   typeof v === "string" && v in CATEGORY_LABELS;
@@ -19,13 +25,20 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  // 共有プール（data/problems.json）への書き込みはローカル開発時のみ許可する。
-  // 公開環境ではブラウザ保存（localStorage）を使うためここには来ない。
-  if (process.env.VERCEL) {
+  // 共有プール（data/problems.json）への書き込みはローカル開発時、または
+  // 公開環境でGitHub連携（GITHUB_TOKEN/GITHUB_REPO）が設定されている場合のみ許可する。
+  if (!isPoolWritable()) {
     return NextResponse.json(
       { error: "この環境では共有プールへの追加は無効です" },
       { status: 403 },
     );
+  }
+  // 公開環境からの書き込みはGitHubへの実コミットを伴うため、AI機能と同じアクセスコードで保護する。
+  if (process.env.VERCEL) {
+    const access = checkAiAccess(request);
+    if (!access.ok) {
+      return NextResponse.json({ error: access.error }, { status: access.status });
+    }
   }
 
   try {
@@ -90,6 +103,19 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  if (!isPoolWritable()) {
+    return NextResponse.json(
+      { error: "この環境では共有プールの削除は無効です" },
+      { status: 403 },
+    );
+  }
+  if (process.env.VERCEL) {
+    const access = checkAiAccess(request);
+    if (!access.ok) {
+      return NextResponse.json({ error: access.error }, { status: access.status });
+    }
+  }
+
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
   const category = url.searchParams.get("category");

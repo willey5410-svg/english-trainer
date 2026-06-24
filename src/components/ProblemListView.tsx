@@ -16,6 +16,7 @@ import {
   loadStats,
 } from "@/lib/storage";
 import { formatPercent } from "@/lib/statistics";
+import { aiPost, getAccessCode } from "@/lib/access";
 import { AddProblemDialog } from "./AddProblemDialog";
 
 type Props = {
@@ -102,17 +103,13 @@ export const ProblemListView = ({
           continue;
         }
         try {
-          const res = await fetch("/api/problems", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              japanese: item.japanese,
-              english: item.english,
-              category: item.category ?? "other",
-              difficulty: item.difficulty ?? 1,
-              grammar: item.grammar,
-              notes: item.notes,
-            }),
+          const res = await aiPost("/api/problems", {
+            japanese: item.japanese,
+            english: item.english,
+            category: item.category ?? "other",
+            difficulty: item.difficulty ?? 1,
+            grammar: item.grammar,
+            notes: item.notes,
           });
           if (res.status === 409) {
             skipped += 1;
@@ -215,6 +212,7 @@ export const ProblemListView = ({
       } else {
         const res = await fetch(`/api/problems?id=${encodeURIComponent(id)}`, {
           method: "DELETE",
+          headers: { "x-access-code": getAccessCode() },
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -250,6 +248,7 @@ export const ProblemListView = ({
 
     const res = await fetch(`/api/problems?category=${category}`, {
       method: "DELETE",
+      headers: { "x-access-code": getAccessCode() },
     });
     if (!res.ok) {
       window.alert("削除に失敗しました（共有プール分）");

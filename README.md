@@ -66,6 +66,7 @@ GEMINI_API_KEY=あなたのAPIキー
 
 - `GEMINI_MODEL` / `GEMINI_GRADE_MODEL`: 生成・採点に使うモデル
 - `APP_ACCESS_CODE`: 設定すると公開環境でも合言葉を入力した人だけ AI 機能を使える（未設定だと公開環境では AI 機能は無効＝ローカル開発時のみ利用可）
+- `GITHUB_TOKEN` / `GITHUB_REPO` / `GITHUB_BRANCH`: 設定すると公開環境からも共有プール（`data/problems.json`）へ GitHub 経由で直接コミットできる（未設定だとブラウザ保存にフォールバック）
 
 ### 4. 開発サーバーの起動
 

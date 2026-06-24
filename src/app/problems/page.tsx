@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { loadProblems } from "@/lib/problems";
+import { isPoolWritable, loadProblems } from "@/lib/problems";
 import { ProblemListView } from "@/components/ProblemListView";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
-// 共有プール（ファイル）への保存はローカル開発時のみ可能。
-const allowPool = !process.env.VERCEL;
+// 共有プールへの保存はローカル開発時、または公開環境でGitHub連携が設定されている場合のみ可能。
+const allowPool = isPoolWritable();
 // AI 英訳は、ローカル または アクセスコード設定済み のとき利用可能。
 const allowAI = !process.env.VERCEL || !!process.env.APP_ACCESS_CODE;
 
