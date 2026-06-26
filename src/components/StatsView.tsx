@@ -57,10 +57,13 @@ const GroupRow = <K extends string | number>({ row }: { row: GroupedStats<K> }) 
   );
 };
 
+type SummaryFilter = "answered" | "untried" | null;
+
 export const StatsView = ({ problems: fileProblems }: Props) => {
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
   const [customProblems, setCustomProblems] = useState<Problem[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [summaryFilter, setSummaryFilter] = useState<SummaryFilter>(null);
 
   useEffect(() => {
     setStats(loadStats());
@@ -106,6 +109,23 @@ export const StatsView = ({ problems: fileProblems }: Props) => {
     setStats({});
   };
 
+  const answeredList = problems
+    .filter((p) => {
+      const s = stats[p.id];
+      return s && s.correctCount + s.incorrectCount > 0;
+    })
+    .map((p) => ({ problem: p, stats: stats[p.id] }))
+    .sort(
+      (a, b) =>
+        b.stats.correctCount + b.stats.incorrectCount -
+        (a.stats.correctCount + a.stats.incorrectCount),
+    );
+
+  const untriedList = problems.filter((p) => {
+    const s = stats[p.id];
+    return !s || s.correctCount + s.incorrectCount === 0;
+  });
+
   return (
     <div className="space-y-6">
       <section className="rounded-xl bg-brand-surface p-6 shadow-sm ring-1 ring-slate-200">
@@ -129,19 +149,73 @@ export const StatsView = ({ problems: fileProblems }: Props) => {
             label="回答数"
             value={`${aggregate.totalAnswers}`}
             sub="累計"
+            onClick={() =>
+              setSummaryFilter((cur) => (cur === "answered" ? null : "answered"))
+            }
+            active={summaryFilter === "answered"}
           />
           <SummaryCard
             label="回答済み問題"
             value={`${aggregate.answeredProblems}`}
             sub={`/ ${aggregate.totalProblems} 問`}
+            onClick={() =>
+              setSummaryFilter((cur) => (cur === "answered" ? null : "answered"))
+            }
+            active={summaryFilter === "answered"}
           />
           <SummaryCard
             label="残り未着手"
             value={`${aggregate.totalProblems - aggregate.answeredProblems}`}
             sub="問題"
+            onClick={() =>
+              setSummaryFilter((cur) => (cur === "untried" ? null : "untried"))
+            }
+            active={summaryFilter === "untried"}
           />
         </div>
       </section>
+
+      {summaryFilter && (
+        <section className="rounded-xl bg-brand-surface p-6 shadow-sm ring-1 ring-slate-200">
+          <h2 className="mb-4 text-base font-bold text-brand-text">
+            {summaryFilter === "answered" ? "回答済みの問題" : "未着手の問題"}
+          </h2>
+          {summaryFilter === "answered" ? (
+            answeredList.length === 0 ? (
+              <div className="text-sm text-brand-muted">まだ回答した問題はありません。</div>
+            ) : (
+              <ul className="divide-y divide-slate-100">
+                {answeredList.map(({ problem, stats: s }) => (
+                  <li key={problem.id} className="py-3">
+                    <div className="text-sm font-medium text-brand-text">
+                      {problem.japanese}
+                    </div>
+                    <div className="truncate text-xs text-brand-muted">
+                      {problem.english}
+                    </div>
+                    <div className="mt-1 text-xs text-brand-muted">
+                      回答数 {s.correctCount + s.incorrectCount}（✓ {s.correctCount} / ✗ {s.incorrectCount}）
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : untriedList.length === 0 ? (
+            <div className="text-sm text-brand-muted">未着手の問題はありません。</div>
+          ) : (
+            <ul className="divide-y divide-slate-100">
+              {untriedList.map((problem) => (
+                <li key={problem.id} className="py-3">
+                  <div className="text-sm font-medium text-brand-text">
+                    {problem.japanese}
+                  </div>
+                  <div className="truncate text-xs text-brand-muted">{problem.english}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
       <section className="rounded-xl bg-brand-surface p-6 shadow-sm ring-1 ring-slate-200">
         <h2 className="mb-4 text-base font-bold text-brand-text">カテゴリ別</h2>
@@ -267,14 +341,25 @@ const SummaryCard = ({
   label,
   value,
   sub,
+  onClick,
+  active,
 }: {
   label: string;
   value: string;
   sub?: string;
+  onClick?: () => void;
+  active?: boolean;
 }) => (
-  <div className="rounded-lg bg-slate-50 px-3 py-3">
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={!onClick}
+    className={`rounded-lg px-3 py-3 text-left ${
+      active ? "bg-blue-50 ring-1 ring-brand-primary" : "bg-slate-50"
+    } ${onClick ? "hover:bg-blue-50" : ""}`}
+  >
     <div className="text-xs text-brand-muted">{label}</div>
     <div className="mt-1 text-xl font-bold text-brand-text">{value}</div>
     {sub && <div className="text-xs text-brand-muted">{sub}</div>}
-  </div>
+  </button>
 );
