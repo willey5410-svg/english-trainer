@@ -13,9 +13,11 @@ type Props = {
   daily: DailyState;
   problems: Problem[];
   allowGrade: boolean;
+  allowPoolUpdate: boolean;
   strictMode: boolean;
   onAnswered: (isCorrect: boolean) => void; // 親側で全体統計・セッションに記録
   onDailyUpdate: (state: DailyState) => void;
+  onProblemUpdated: (problemId: string, english: string) => void;
   onExit: () => void;
 };
 
@@ -23,9 +25,11 @@ export const DailyChallenge = ({
   daily,
   problems,
   allowGrade,
+  allowPoolUpdate,
   strictMode,
   onAnswered,
   onDailyUpdate,
+  onProblemUpdated,
   onExit,
 }: Props) => {
   const total = daily.problemIds.length;
@@ -126,10 +130,12 @@ export const DailyChallenge = ({
             problem={problem}
             strictMode={strictMode}
             allowGrade={allowGrade}
+            allowPoolUpdate={allowPoolUpdate}
             hideSkip
             onAnswered={handleAnswered}
             onNext={handleNext}
             onSkip={handleNext}
+            onProblemUpdated={onProblemUpdated}
           />
         </>
       ) : (

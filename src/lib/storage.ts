@@ -111,4 +111,15 @@ export const deleteCustomProblem = (id: string): Problem[] => {
   return remaining;
 };
 
+export const updateCustomProblemEnglish = (
+  id: string,
+  english: string,
+): Problem[] => {
+  const updated = loadCustomProblems().map((p) =>
+    p.id === id ? { ...p, english } : p,
+  );
+  saveCustomProblems(updated);
+  return updated;
+};
+
 export const isCustomProblemId = (id: string): boolean => id.startsWith("local-");
