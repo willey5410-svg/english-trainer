@@ -5,6 +5,7 @@ import { Problem, AppSettings, ProblemStats } from "@/lib/types";
 import {
   DEFAULT_SETTINGS,
   addCustomProblems,
+  isCustomProblemId,
   loadCustomProblems,
   loadSettings,
   loadStats,
@@ -156,6 +157,21 @@ export const TrainingApp = ({
     saveSettings(next);
   };
 
+  const handleProblemUpdated = (problemId: string, english: string) => {
+    if (isCustomProblemId(problemId)) {
+      setCustomProblems((prev) =>
+        prev.map((p) => (p.id === problemId ? { ...p, english } : p)),
+      );
+    } else {
+      setFileProblems((prev) =>
+        prev.map((p) => (p.id === problemId ? { ...p, english } : p)),
+      );
+    }
+    setCurrentProblem((prev) =>
+      prev && prev.id === problemId ? { ...prev, english } : prev,
+    );
+  };
+
   const handleAnswered = (isCorrect: boolean) => {
     if (!currentProblem) return;
     recordAnswer(currentProblem.id, isCorrect);
@@ -233,9 +249,11 @@ export const TrainingApp = ({
         daily={daily}
         problems={problems}
         allowGrade={allowGrade}
+        allowPoolUpdate={allowGenerate}
         strictMode={settings.strictMode}
         onAnswered={handleAnswered}
         onDailyUpdate={setDaily}
+        onProblemUpdated={handleProblemUpdated}
         onExit={() => {
           setDaily(loadDaily());
           setDailyMode(false);
@@ -293,9 +311,11 @@ export const TrainingApp = ({
           problem={currentProblem}
           strictMode={settings.strictMode}
           allowGrade={allowGrade}
+          allowPoolUpdate={allowGenerate}
           onAnswered={handleAnswered}
           onNext={handleNext}
           onSkip={handleSkip}
+          onProblemUpdated={handleProblemUpdated}
         />
       ) : (
         <div className="rounded-xl bg-brand-surface p-8 text-center shadow-sm ring-1 ring-slate-200">

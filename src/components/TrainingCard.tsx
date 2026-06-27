@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { computeDiff, isExactMatch } from "@/lib/diff";
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, Problem } from "@/lib/types";
 import { aiPost } from "@/lib/access";
+import { isCustomProblemId, updateCustomProblemEnglish } from "@/lib/storage";
 import { DiffView } from "./DiffView";
 import { AccessCodeForm } from "./AccessCodeForm";
 
@@ -41,20 +42,24 @@ type Props = {
   problem: Problem;
   strictMode: boolean;
   allowGrade: boolean;
+  allowPoolUpdate: boolean;
   onAnswered: (isCorrect: boolean) => void;
   onNext: () => void;
   onSkip: () => void;
   hideSkip?: boolean;
+  onProblemUpdated: (problemId: string, english: string) => void;
 };
 
 export const TrainingCard = ({
   problem,
   strictMode,
   allowGrade,
+  allowPoolUpdate,
   onAnswered,
   onNext,
   onSkip,
   hideSkip = false,
+  onProblemUpdated,
 }: Props) => {
   const [userInput, setUserInput] = useState("");
   const [revealed, setRevealed] = useState(false);
@@ -63,6 +68,9 @@ export const TrainingCard = ({
   const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
   const [gradeError, setGradeError] = useState<string | null>(null);
   const [needsCode, setNeedsCode] = useState(false);
+  const [replaceState, setReplaceState] = useState<
+    "idle" | "saving" | "done" | "declined"
+  >("idle");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -73,6 +81,7 @@ export const TrainingCard = ({
     setGradeResult(null);
     setGradeError(null);
     setNeedsCode(false);
+    setReplaceState("idle");
     textareaRef.current?.focus();
   }, [problem.id]);
 
@@ -110,11 +119,38 @@ export const TrainingCard = ({
     setRevealed(true);
   };
 
+  const handleReplace = async () => {
+    if (!gradeResult?.betterVersion) return;
+    const english = gradeResult.betterVersion;
+    setReplaceState("saving");
+    try {
+      if (isCustomProblemId(problem.id)) {
+        updateCustomProblemEnglish(problem.id, english);
+      } else {
+        const res = await fetch("/api/problems", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: problem.id, english }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error ?? "更新に失敗しました");
+        }
+      }
+      onProblemUpdated(problem.id, english);
+      setReplaceState("done");
+    } catch {
+      setReplaceState("idle");
+    }
+  };
+
   const handleGrade = (isCorrect: boolean) => {
     if (graded) return;
     setGraded(true);
     onAnswered(isCorrect);
   };
+
+  const canReplace = isCustomProblemId(problem.id) || allowPoolUpdate;
 
   const diffSegments = revealed
     ? computeDiff(userInput, problem.english, strictMode)
@@ -236,6 +272,36 @@ export const TrainingCard = ({
                 <div className="mt-3 rounded-md bg-white/70 px-3 py-2 text-sm">
                   <span className="mr-1 font-medium">改善例:</span>
                   {gradeResult.betterVersion}
+                </div>
+              )}
+              {canReplace &&
+                gradeResult.betterVersion &&
+                gradeResult.betterVersion !== problem.english &&
+                replaceState !== "done" &&
+                replaceState !== "declined" && (
+                  <div className="mt-3 flex flex-wrap items-center gap-2 rounded-md bg-white/70 px-3 py-2 text-sm">
+                    <span>この改善例を模範解答として登録し直しますか？</span>
+                    <button
+                      type="button"
+                      onClick={handleReplace}
+                      disabled={replaceState === "saving"}
+                      className="rounded border border-brand-primary px-2 py-1 text-xs font-medium text-brand-primary hover:bg-blue-50 disabled:opacity-50"
+                    >
+                      {replaceState === "saving" ? "更新中…" : "置き換える"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReplaceState("declined")}
+                      disabled={replaceState === "saving"}
+                      className="rounded border border-slate-300 px-2 py-1 text-xs text-brand-muted hover:bg-slate-50"
+                    >
+                      そのままにする
+                    </button>
+                  </div>
+                )}
+              {replaceState === "done" && (
+                <div className="mt-3 rounded-md bg-white/70 px-3 py-2 text-xs text-emerald-700">
+                  模範解答を更新しました
                 </div>
               )}
             </div>

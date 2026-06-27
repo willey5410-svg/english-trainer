@@ -89,6 +89,44 @@ export async function POST(request: Request) {
   }
 }
 
+export async function PUT(request: Request) {
+  // 共有プール（data/problems.json）への書き込みはローカル開発時のみ許可する。
+  if (process.env.VERCEL) {
+    return NextResponse.json(
+      { error: "この環境では共有プールの更新は無効です" },
+      { status: 403 },
+    );
+  }
+
+  try {
+    const body = await request.json();
+    const id = typeof body.id === "string" ? body.id : "";
+    const english = typeof body.english === "string" ? body.english.trim() : "";
+    if (!id || !english) {
+      return NextResponse.json(
+        { error: "id と english は必須です" },
+        { status: 400 },
+      );
+    }
+
+    const problems = await loadProblems();
+    const target = problems.find((p) => p.id === id);
+    if (!target) {
+      return NextResponse.json({ error: "問題が見つかりません" }, { status: 404 });
+    }
+
+    const updated = problems.map((p) => (p.id === id ? { ...p, english } : p));
+    await saveProblems(updated);
+    return NextResponse.json({ problem: { ...target, english } });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "不明なエラー";
+    return NextResponse.json(
+      { error: `更新に失敗しました: ${message}` },
+      { status: 500 },
+    );
+  }
+}
+
 export async function DELETE(request: Request) {
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
