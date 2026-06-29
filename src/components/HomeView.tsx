@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Problem, ProblemStats } from "@/lib/types";
-import { loadCustomProblems, loadStats } from "@/lib/storage";
+import { AppSettings, Problem, ProblemStats } from "@/lib/types";
+import { loadCustomProblems, loadSettings, loadStats } from "@/lib/storage";
 import { computeAggregate, formatPercent } from "@/lib/statistics";
 import { computePriority } from "@/lib/scheduling";
 import {
@@ -20,12 +20,14 @@ type Props = {
 export const HomeView = ({ initialProblems }: Props) => {
   const [stats, setStats] = useState<Record<string, ProblemStats>>({});
   const [customProblems, setCustomProblems] = useState<Problem[]>([]);
+  const [settings, setSettings] = useState<AppSettings | null>(null);
   const [daily, setDaily] = useState<DailyState | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setStats(loadStats());
     setCustomProblems(loadCustomProblems());
+    setSettings(loadSettings());
     setHydrated(true);
   }, []);
 
@@ -36,10 +38,10 @@ export const HomeView = ({ initialProblems }: Props) => {
   }, [initialProblems, customProblems]);
 
   useEffect(() => {
-    if (!hydrated || problems.length === 0) return;
-    setDaily(getOrCreateToday(problems, stats));
+    if (!hydrated || problems.length === 0 || !settings) return;
+    setDaily(getOrCreateToday(problems, stats, settings.dailyCount));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated, problems.length]);
+  }, [hydrated, problems.length, settings]);
 
   if (!hydrated) {
     return <div className="text-center text-brand-muted">読み込み中…</div>;

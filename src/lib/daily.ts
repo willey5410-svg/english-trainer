@@ -72,6 +72,7 @@ export const buildDailyProblemIds = (
 export const getOrCreateToday = (
   problems: Problem[],
   stats: Record<string, ProblemStats>,
+  count: number = DAILY_COUNT,
 ): DailyState => {
   const today = getTodayKey();
   const existing = loadDaily();
@@ -80,7 +81,7 @@ export const getOrCreateToday = (
   }
   const state: DailyState = {
     date: today,
-    problemIds: buildDailyProblemIds(problems, stats),
+    problemIds: buildDailyProblemIds(problems, stats, count),
     completedIds: [],
     correctIds: [],
     streak: existing?.streak ?? 0,

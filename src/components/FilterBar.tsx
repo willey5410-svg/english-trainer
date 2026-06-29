@@ -87,6 +87,25 @@ export const FilterBar = ({ settings, onChange, availableCount }: Props) => {
         <span>厳密判定</span>
       </label>
 
+      <label
+        className="flex items-center gap-2"
+        title="「今日の課題」で1日に出題する問題数"
+      >
+        <span className="text-brand-muted">今日の課題数</span>
+        <input
+          type="number"
+          min={1}
+          max={50}
+          className="w-16 rounded border border-slate-300 bg-white px-2 py-1"
+          value={settings.dailyCount}
+          onChange={(e) => {
+            const n = Math.max(1, Math.min(50, Number(e.target.value) || 1));
+            onChange({ ...settings, dailyCount: n });
+          }}
+        />
+        <span className="text-brand-muted">問</span>
+      </label>
+
       <div className="ml-auto text-brand-muted">対象 {availableCount} 問</div>
     </div>
   );

@@ -139,7 +139,7 @@ export const TrainingApp = ({
   // 当日の課題セットを用意する（日付が変わったら自動で再生成。1日1回・冪等）。
   useEffect(() => {
     if (!hydrated || problems.length === 0) return;
-    setDaily(getOrCreateToday(problems, stats));
+    setDaily(getOrCreateToday(problems, stats, settings.dailyCount));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, problems.length]);
 

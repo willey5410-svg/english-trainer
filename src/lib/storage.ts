@@ -1,6 +1,7 @@
 "use client";
 
 import { AppSettings, Problem, ProblemStats } from "./types";
+import { DAILY_COUNT } from "./daily";
 
 const STATS_KEY = "english-trainer:stats";
 const SETTINGS_KEY = "english-trainer:settings";
@@ -11,6 +12,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   filterDifficulty: "all",
   weakProblemMode: false,
   strictMode: false,
+  dailyCount: DAILY_COUNT,
 };
 
 export const loadStats = (): Record<string, ProblemStats> => {
