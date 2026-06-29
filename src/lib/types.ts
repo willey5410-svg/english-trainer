@@ -47,4 +47,5 @@ export type AppSettings = {
   filterDifficulty: Difficulty | "all";
   weakProblemMode: boolean;
   strictMode: boolean;
+  dailyCount: number;
 };
