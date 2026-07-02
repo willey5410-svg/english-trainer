@@ -97,10 +97,10 @@ export const FilterBar = ({ settings, onChange, availableCount }: Props) => {
           min={1}
           max={50}
           className="w-16 rounded border border-slate-300 bg-white px-2 py-1"
-          value={settings.dailyCount}
-          onChange={(e) => {
+          defaultValue={settings.dailyCount}
+          onBlur={(e) => {
             const n = Math.max(1, Math.min(50, Number(e.target.value) || 1));
-            onChange({ ...settings, dailyCount: n });
+            if (n !== settings.dailyCount) onChange({ ...settings, dailyCount: n });
           }}
         />
         <span className="text-brand-muted">問</span>
